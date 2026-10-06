@@ -216,22 +216,22 @@ export const InternshipDiscoveryPage: React.FC = () => {
                   Minimum Stipend
                 </label>
                 <span className="text-xs font-bold text-brand-600 dark:text-brand-400">
-                  ${minStipend}/mo
+                  ₹{minStipend.toLocaleString()}/mo
                 </span>
               </div>
               <input
                 type="range"
                 min="0"
-                max="4000"
-                step="250"
+                max="75000"
+                step="5000"
                 value={minStipend}
                 onChange={e => setMinStipend(Number(e.target.value))}
                 className="w-full accent-brand-600 cursor-pointer"
               />
               <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                <span>$0</span>
-                <span>$2,000</span>
-                <span>$4,000+</span>
+                <span>₹0</span>
+                <span>₹35,000</span>
+                <span>₹75,000+</span>
               </div>
             </div>
 
@@ -369,7 +369,7 @@ export const InternshipDiscoveryPage: React.FC = () => {
                     <div>
                       <span className="text-slate-400 text-[11px]">Monthly Stipend: </span>
                       <span className="font-bold text-slate-900 dark:text-white">
-                        ${internship.stipend_amount.toLocaleString()} USD
+                        ₹{internship.stipend_amount.toLocaleString()} / mo
                       </span>
                     </div>
                     <div className="hidden sm:block text-slate-300 dark:text-slate-700">|</div>

@@ -23,31 +23,42 @@ def run_seed():
     db: Session = SessionLocal()
 
     try:
-        # Check if already seeded
-        if db.query(User).filter(User.email == "admin@demo.local").first():
-            print("✨ Seed data already exists in database. Skipping generation.")
+        # Check if already seeded with Indian data
+        existing_admin = db.query(User).filter(User.email == "admin@demo.local").first()
+        if existing_admin and existing_admin.first_name == "Dr. Rajesh":
+            print("✨ Indian real-world seed data already exists in database. Skipping generation.")
             return
+        elif existing_admin:
+            print("🔄 Refreshing existing demo data with authentic Indian collegiate dataset...")
+            # Clear previous tables to reseed cleanly
+            Base.metadata.drop_all(bind=engine)
+            Base.metadata.create_all(bind=engine)
+            db.close()
+            db = SessionLocal()
 
-        print("🚀 Seeding realistic demo accounts & institutional data...")
+        print("🇮🇳 Seeding authentic Indian University & Tech Industry Placement data...")
 
-        # 1. System Settings
+        # 1. System Settings - Aligned with Indian Technical Universities & AICTE Guidelines
         defaults = [
-            ("ACADEMIC_YEAR", "2025-2026", "Current active academic session"),
-            ("MIN_GPA_THRESHOLD", "2.0", "Minimum GPA to apply for internships"),
-            ("MAX_ACTIVE_APPLICATIONS_PER_STUDENT", "10", "Maximum concurrent active applications"),
-            ("INTERVIEW_NOTICE_MIN_HOURS", "24", "Minimum hours required before interview schedule"),
-            ("ALLOW_STUDENT_COMPANY_RATINGS", "true", "Enable students to submit company reviews")
+            ("ACADEMIC_SESSION", "2025-2026", "Current active academic session across colleges"),
+            ("MIN_CGPA_THRESHOLD", "6.5", "Minimum CGPA (scale of 10.0) required for placement eligibility"),
+            ("MAX_ACTIVE_APPLICATIONS_PER_STUDENT", "10", "Maximum concurrent active internship applications allowed per student"),
+            ("INTERVIEW_NOTICE_MIN_HOURS", "24", "Mandatory minimum advance notice in hours before scheduling campus interviews"),
+            ("ALLOW_STUDENT_COMPANY_RATINGS", "true", "Permit registered students to rate corporate recruitment culture"),
+            ("AFFILIATING_UNIVERSITY", "COEP Technological University, Pune (Autonomous)", "Apex Institutional Entity"),
+            ("PLACEMENT_CELL_CONTACT", "tpo@coep.ac.in | +91 (020) 2550-7000", "Official Training & Placement Office contact"),
+            ("CURRENCY_SYMBOL", "₹", "Official institutional currency symbol (INR)")
         ]
         for key, val, descr in defaults:
             db.add(SystemSetting(key=key, value=val, description=descr))
 
-        # 2. Demo Core Accounts
+        # 2. Demo Core Accounts (Indian College Context)
         admin_user = User(
             email="admin@demo.local",
             password_hash=get_password_hash("Admin@1234"),
-            first_name="Dr. Eleanor",
-            last_name="Vance",
-            phone="+1 (555) 019-2831",
+            first_name="Dr. Rajesh",
+            last_name="Kulkarni",
+            phone="+91 98220 12345",
             role=UserRole.ADMIN,
             is_active=True,
             is_verified=True
@@ -57,9 +68,9 @@ def run_seed():
         faculty_user = User(
             email="faculty@demo.local",
             password_hash=get_password_hash("Faculty@1234"),
-            first_name="Prof. Marcus",
-            last_name="Sterling",
-            phone="+1 (555) 019-4820",
+            first_name="Prof. Sunita",
+            last_name="Sharma",
+            phone="+91 98220 54321",
             role=UserRole.FACULTY,
             is_active=True,
             is_verified=True
@@ -69,9 +80,9 @@ def run_seed():
         primary_student = User(
             email="student@demo.local",
             password_hash=get_password_hash("Student@1234"),
-            first_name="Aiden",
-            last_name="Reynolds",
-            phone="+1 (555) 018-7732",
+            first_name="Aarav",
+            last_name="Sharma",
+            phone="+91 98765 43210",
             role=UserRole.STUDENT,
             is_active=True,
             is_verified=True
@@ -79,66 +90,68 @@ def run_seed():
         db.add(primary_student)
         db.commit()
 
-        # Faculty profile for Prof. Marcus Sterling
+        # Faculty profile for Prof. Sunita Sharma
         db.add(FacultyProfile(
             user_id=faculty_user.id,
-            employee_id="FAC-CS-101",
-            department="Computer Science & Engineering",
-            designation="Director of Corporate Relations & Internship Coordinator",
-            cabin_location="Technology Block A, Room 304"
+            employee_id="FAC-CSE-108",
+            department="Computer Engineering",
+            designation="Associate Professor & Training & Placement Coordinator",
+            cabin_location="Aryabhatta Academic Complex, Room 304, T&P Wing"
         ))
 
-        # Student profile for Aiden Reynolds
+        # Student profile for Aarav Sharma (COEP Pune - B.Tech CSE)
         db.add(StudentProfile(
             user_id=primary_student.id,
-            student_id_number="STU2026-0001",
-            department="Computer Science",
+            student_id_number="PRN202201040001",
+            department="Computer Engineering",
             batch_year=2026,
-            gpa=3.88,
-            bio="Senior Computer Science undergraduate specializing in full-stack architecture, distributed systems, and cloud infrastructure. Open-source contributor and hackathon finalist.",
-            resume_url="/api/v1/files/download/aiden_reynolds_resume.pdf",
-            resume_filename="Aiden_Reynolds_CS_Resume.pdf",
-            resume_updated_at=datetime.utcnow() - timedelta(days=5),
-            linkedin_url="https://linkedin.com/in/aiden-reynolds",
-            github_url="https://github.com/aiden-reynolds",
-            portfolio_url="https://aidenreynolds.dev",
-            skills=["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker", "AWS", "Tailwind CSS"],
+            gpa=9.24,  # Scale of 10.0
+            bio="Final-year B.Tech Computer Engineering student at COEP Technological University. Passionate about distributed systems, microservices, cloud-native architectures, and Go/FastAPI backend engineering. Smart India Hackathon (SIH) finalist and active open-source contributor.",
+            resume_url="/api/v1/files/download/aarav_sharma_cse_resume.pdf",
+            resume_filename="Aarav_Sharma_BTech_CSE_Resume.pdf",
+            resume_updated_at=datetime.utcnow() - timedelta(days=3),
+            linkedin_url="https://linkedin.com/in/aarav-sharma-tech",
+            github_url="https://github.com/aarav-sharma",
+            portfolio_url="https://aaravsharma.dev",
+            skills=["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker", "Go", "Redis", "Tailwind CSS", "Kubernetes"],
             education=[
-                {"degree": "Bachelor of Science in Computer Science", "institution": "State University of Technology", "start_year": 2022, "end_year": 2026, "gpa": 3.88}
+                {"degree": "B.Tech in Computer Engineering", "institution": "COEP Technological University, Pune", "start_year": 2022, "end_year": 2026, "gpa": 9.24},
+                {"degree": "Higher Secondary Certificate (HSC) - Science", "institution": "Fergusson College, Pune", "start_year": 2020, "end_year": 2022, "gpa": 9.40}
             ],
             projects=[
-                {"title": "Distributed Task Scheduler", "description": "High-throughput asynchronous task queue built with Go and Redis.", "tech_stack": ["Go", "Redis", "Docker"], "github_url": "https://github.com/demo/task-scheduler"},
-                {"title": "Cloud Monitoring Dashboard", "description": "Real-time metrics aggregator visualizer using React and WebSockets.", "tech_stack": ["React", "FastAPI", "ChartJS"], "github_url": "https://github.com/demo/cloud-monitor"}
+                {"title": "BharatPay UPI Gateway Simulator", "description": "High-throughput asynchronous mock payment settlement pipeline built with Go, Redis pub/sub, and PostgreSQL.", "tech_stack": ["Go", "Redis", "PostgreSQL", "Docker"], "github_url": "https://github.com/aarav-sharma/bharatpay-core"},
+                {"title": "Campus Placement Drive Scheduler", "description": "Interactive interview slot scheduling and live applicant tracker with real-time status notifications.", "tech_stack": ["React", "FastAPI", "Tailwind CSS"], "github_url": "https://github.com/aarav-sharma/campus-tpo"}
             ],
             certifications=[
-                {"name": "AWS Certified Solutions Architect - Associate", "issuer": "Amazon Web Services", "issue_date": "2025-04", "credential_url": "https://aws.amazon.com/verify/123"}
+                {"name": "AWS Certified Solutions Architect - Associate", "issuer": "Amazon Web Services", "issue_date": "2025-05", "credential_url": "https://aws.amazon.com/verify/demo-123"},
+                {"name": "NPTEL Elite Gold: Cloud Computing & Distributed Systems", "issuer": "IIT Kharagpur / NPTEL", "issue_date": "2024-11", "credential_url": "https://nptel.ac.in/noc"}
             ],
             placement_status=PlacementStatus.NOT_PLACED
         ))
         db.commit()
 
-        # 3. 20 Realistic Students
+        # 3. 20 Authentic Indian Students Across Departments & Top Colleges
         realistic_students_data = [
-            ("Sophia", "Chen", "sophia.chen@student.university.edu", "Computer Science", 3.95, ["Python", "PyTorch", "NLP", "React"]),
-            ("Liam", "Kowalski", "liam.k@student.university.edu", "Information Technology", 3.72, ["Java", "Spring Boot", "MySQL", "Kubernetes"]),
-            ("Priya", "Nambiar", "priya.n@student.university.edu", "Data Science", 3.91, ["R", "Python", "SQL", "Tableau", "Machine Learning"]),
-            ("Lucas", "Silva", "lucas.silva@student.university.edu", "Software Engineering", 3.65, ["TypeScript", "Next.js", "Node.js", "GraphQL"]),
-            ("Emma", "Watson", "emma.w@student.university.edu", "Cybersecurity", 3.82, ["Network Security", "Cryptography", "Linux", "Python", "Wireshark"]),
-            ("Devon", "Brooks", "devon.b@student.university.edu", "Computer Science", 3.54, ["C++", "Algorithms", "OpenCV", "Git"]),
-            ("Zoe", "Katsaros", "zoe.k@student.university.edu", "Artificial Intelligence", 3.98, ["Deep Learning", "TensorFlow", "Computer Vision", "Python"]),
-            ("Ethan", "Hunt", "ethan.h@student.university.edu", "Computer Science", 3.45, ["Go", "Microservices", "Docker", "PostgreSQL"]),
-            ("Ananya", "Sharma", "ananya.s@student.university.edu", "Information Technology", 3.89, ["React", "Redux", "Tailwind CSS", "REST APIs"]),
-            ("Mateo", "Rodriguez", "mateo.r@student.university.edu", "Computer Science", 3.68, ["Python", "Django", "PostgreSQL", "Celery"]),
-            ("Chloe", "Dubois", "chloe.d@student.university.edu", "Data Science", 3.76, ["Pandas", "Scikit-Learn", "Big Data", "PowerBI"]),
-            ("Noah", "Kim", "noah.k@student.university.edu", "Software Engineering", 3.84, ["Flutter", "Dart", "Firebase", "Mobile Architecture"]),
-            ("Aaliyah", "Khan", "aaliyah.k@student.university.edu", "Cybersecurity", 3.93, ["Penetration Testing", "Security Auditing", "Python", "Bash"]),
-            ("Benjamin", "Foster", "ben.f@student.university.edu", "Computer Science", 3.61, ["C#", ".NET Core", "Azure", "SQL Server"]),
-            ("Mia", "Takahashi", "mia.t@student.university.edu", "UI/UX & Design Computing", 3.87, ["Figma", "Design Systems", "HTML/CSS", "User Research"]),
-            ("Oliver", "Hansen", "oliver.h@student.university.edu", "Cloud Computing", 3.79, ["Terraform", "AWS", "CI/CD", "Linux Admin"]),
-            ("Isabella", "Rossi", "isabella.r@student.university.edu", "Information Systems", 3.70, ["Business Analytics", "SQL", "Scrum", "Jira"]),
-            ("Julian", "Morales", "julian.m@student.university.edu", "Computer Science", 3.85, ["Rust", "Systems Programming", "Distributed Systems"]),
-            ("Kavya", "Patel", "kavya.p@student.university.edu", "Data Science", 3.92, ["Statistics", "Python", "Data Modeling", "Spark"]),
-            ("Gabriel", "Santos", "gabriel.s@student.university.edu", "Software Engineering", 3.58, ["JavaScript", "Express", "MongoDB", "React"])
+            ("Priya", "Patel", "priya.patel@student.campus.ac.in", "Computer Engineering", 9.45, ["Python", "PyTorch", "NLP", "FastAPI", "React"]),
+            ("Rohan", "Deshmukh", "rohan.deshmukh@student.campus.ac.in", "Information Technology", 8.85, ["Java", "Spring Boot", "MySQL", "Kubernetes", "Kafka"]),
+            ("Sneha", "Kulkarni", "sneha.kulkarni@student.campus.ac.in", "Artificial Intelligence & Data Science", 9.12, ["Python", "TensorFlow", "Pandas", "Computer Vision", "SQL"]),
+            ("Aditya", "Nair", "aditya.nair@student.campus.ac.in", "Electronics & Telecommunication", 8.55, ["C++", "Embedded C", "IoT", "RTOS", "Python"]),
+            ("Ananya", "Iyer", "ananya.iyer@student.campus.ac.in", "Computer Engineering", 9.30, ["TypeScript", "Next.js", "Node.js", "GraphQL", "Tailwind CSS"]),
+            ("Siddharth", "Verma", "siddharth.verma@student.campus.ac.in", "Software Engineering", 8.75, ["Go", "Microservices", "Docker", "PostgreSQL", "gRPC"]),
+            ("Kavya", "Swaminathan", "kavya.swaminathan@student.campus.ac.in", "Data Science & Analytics", 9.20, ["Python", "R", "SQL", "Tableau", "Scikit-Learn"]),
+            ("Vikram", "Joshi", "vikram.joshi@student.campus.ac.in", "Computer Engineering", 8.40, ["C++", "Data Structures", "Algorithms", "Competitive Programming"]),
+            ("Neha", "Gupta", "neha.gupta@student.campus.ac.in", "Information Technology", 9.38, ["React", "Redux", "Node.js", "MongoDB", "AWS"]),
+            ("Arjun", "Reddy", "arjun.reddy@student.campus.ac.in", "Computer Engineering", 9.05, ["Python", "Deep Learning", "Transformers", "CUDA", "Linux"]),
+            ("Pooja", "Sundaram", "pooja.sundaram@student.campus.ac.in", "Artificial Intelligence & Robotics", 8.65, ["ROS2", "Python", "OpenCV", "C++", "SLAM"]),
+            ("Rahul", "Mehta", "rahul.mehta@student.campus.ac.in", "Computer Engineering", 8.80, ["Flutter", "Dart", "Firebase", "Android", "REST APIs"]),
+            ("Tanvi", "Shinde", "tanvi.shinde@student.campus.ac.in", "Cybersecurity & InfoSec", 9.15, ["Network Security", "Penetration Testing", "Wireshark", "Linux", "Python"]),
+            ("Yash", "Patil", "yash.patil@student.campus.ac.in", "Mechanical Engineering (IoT Minor)", 8.20, ["AutoCAD", "MATLAB", "SolidWorks", "Python", "PLC"]),
+            ("Ishita", "Sen", "ishita.sen@student.campus.ac.in", "Computer Engineering", 9.40, ["Rust", "Systems Programming", "Distributed Systems", "Linux Kernel"]),
+            ("Nikhil", "Agrawal", "nikhil.agrawal@student.campus.ac.in", "Computer Engineering", 8.60, ["C#", ".NET Core", "Azure", "SQL Server", "Docker"]),
+            ("Riya", "Bansal", "riya.bansal@student.campus.ac.in", "Information Technology", 9.22, ["Figma", "UI/UX", "React", "Design Systems", "HTML/CSS"]),
+            ("Varun", "Menon", "varun.menon@student.campus.ac.in", "Electronics & Communication", 8.48, ["VLSI", "Verilog", "Embedded Systems", "FPGA", "C"]),
+            ("Divya", "Nambiar", "divya.nambiar@student.campus.ac.in", "Data Science & Analytics", 8.92, ["Big Data", "Spark", "PySpark", "Snowflake", "PowerBI"]),
+            ("Harsh", "Vardhan", "harsh.vardhan@student.campus.ac.in", "Software Engineering", 8.70, ["JavaScript", "Express", "MongoDB", "Docker", "Node.js"])
         ]
 
         all_student_users = [primary_student]
@@ -148,7 +161,7 @@ def run_seed():
                 password_hash=get_password_hash("Student@1234"),
                 first_name=first,
                 last_name=last,
-                phone=f"+1 (555) 01{idx:02d}-9941",
+                phone=f"+91 98220 {idx:02d}941",
                 role=UserRole.STUDENT,
                 is_active=True,
                 is_verified=True
@@ -159,31 +172,101 @@ def run_seed():
 
             db.add(StudentProfile(
                 user_id=s_user.id,
-                student_id_number=f"STU2026-{idx:04d}",
+                student_id_number=f"PRN20220104{1000 + idx:04d}",
                 department=dept,
                 batch_year=2026,
                 gpa=gpa,
-                bio=f"Passionate {dept} student focused on building robust scalable systems. Seeking challenging internship opportunities.",
+                bio=f"Pre-final year {dept} student at COEP Tech University. Dedicated to engineering robust, industry-ready solutions.",
                 resume_url=f"/api/v1/files/download/{first.lower()}_{last.lower()}_resume.pdf",
-                resume_filename=f"{first}_{last}_Resume.pdf",
-                resume_updated_at=datetime.utcnow() - timedelta(days=random.randint(1, 20)),
+                resume_filename=f"{first}_{last}_BTech_Resume.pdf",
+                resume_updated_at=datetime.utcnow() - timedelta(days=random.randint(1, 15)),
                 skills=skills,
                 placement_status=PlacementStatus.PLACED if idx % 5 == 0 else PlacementStatus.NOT_PLACED
             ))
         db.commit()
 
-        # 4. 10 Realistic Companies
+        # 4. 10 Top Indian Tech Companies & Global Capability Centers (GCCs)
         companies_data = [
-            ("Apex Cloud Technologies", "US-DEL-984712", "Cloud & Enterprise SaaS", "https://apexcloud.example.com", "Seattle, WA", "Apex Cloud provides enterprise-grade kubernetes hosting and autonomous cloud governance platforms."),
-            ("Quantum Nexus Labs", "US-CA-551029", "Artificial Intelligence & Robotics", "https://quantumnexus.example.com", "San Francisco, CA", "Pioneering next-generation transformer models, autonomous robotics, and edge intelligence systems."),
-            ("Vanguard Financial Tech", "US-NY-339182", "Fintech & Algorithmic Trading", "https://vanguardfin.example.com", "New York, NY", "Institutional financial infrastructure delivering ultra-low-latency market connectivity and risk engines."),
-            ("CyberShield Defense Systems", "US-VA-881923", "Cybersecurity & InfoSec", "https://cybershield.example.com", "McLean, VA", "Defending critical cyber assets, cloud perimeter defense, zero-trust networks, and threat intelligence."),
-            ("BioGenix Healthcare Analytics", "US-MA-449102", "HealthTech & Bioinformatics", "https://biogenix.example.com", "Boston, MA", "Accelerating precision medicine and clinical trials through clinical data pipelines and AI diagnosis models."),
-            ("InfraScale High-Performance Systems", "US-TX-772910", "Systems & Hardware Infrastructure", "https://infrascale.example.com", "Austin, TX", "Engineering ultra-scalable telemetry, data center automation, and hardware-accelerated computing engines."),
-            ("Starlight Interactive Digital", "US-CA-221948", "Interactive Media & Gaming Tech", "https://starlight.example.com", "Los Angeles, CA", "Real-time 3D simulation, spatial audio computing, and cross-platform multiplayer experiences."),
-            ("Pulse Robotics Corporation", "US-PA-661094", "Industrial Automation & Robotics", "https://pulserobotics.example.com", "Pittsburgh, PA", "Autonomous mobile robots and computer vision systems powering smart warehouses and precision manufacturing."),
-            ("Hyperion Renewable CleanEnergy", "US-CO-119284", "CleanTech & Smart Grid Energy", "https://hyperionenergy.example.com", "Denver, CO", "Predictive smart grid software, renewable storage balancing, and carbon emission analytics."),
-            ("Aether Design Studio & Labs", "US-IL-992019", "Product Design & HCI Systems", "https://aetherdesign.example.com", "Chicago, IL", "Award-winning product studio creating enterprise human-computer interfaces and accessibility technologies.")
+            (
+                "Razorpay Software Private Limited",
+                "U72200KA2013PTC071367",
+                "FinTech & Payment Infrastructure",
+                "https://razorpay.com",
+                "Bengaluru, Karnataka (Koramangala)",
+                "Razorpay is India's leading full-stack financial services and payment gateway unicorn, processing billions in transactions annually for businesses across India."
+            ),
+            (
+                "Tata Consultancy Services (TCS)",
+                "L22210MH1995PLC084781",
+                "Enterprise IT & Cloud Solutions",
+                "https://www.tcs.com",
+                "Mumbai, Maharashtra (Offices: Pune Hinjawadi, Bengaluru)",
+                "A flagship Tata enterprise and India's most valuable tech powerhouse, TCS pioneers digital transformation, AI, and cognitive business operations globally."
+            ),
+            (
+                "Infosys Limited",
+                "L85110KA1981PLC013115",
+                "Digital Services, AI & Cloud Platforms",
+                "https://www.infosys.com",
+                "Bengaluru, Karnataka (Electronics City)",
+                "A global leader in next-generation digital services, enterprise cloud consulting (Infosys Cobalt), and human-centric artificial intelligence (Infosys Topaz)."
+            ),
+            (
+                "Zomato Limited (Eternal)",
+                "L93030DL2010PLC198141",
+                "FoodTech, Quick-Commerce & Logistics",
+                "https://www.zomato.com",
+                "Gurugram, Haryana (Delhi NCR)",
+                "Pioneering hyper-local delivery, AI dispatch routing algorithms, and consumer logistics serving millions of customers daily across hundreds of Indian cities."
+            ),
+            (
+                "Reliance Jio Infocomm Limited",
+                "U72900GJ2007PLC105869",
+                "Telecom, 5G Cloud & AI Platforms",
+                "https://www.jio.com",
+                "Navi Mumbai, Maharashtra (Reliance Corporate Park)",
+                "India's largest digital services provider, engineering sovereign 5G standalone architecture, cloud-native telecom stacks, and connected IoT smart grid solutions."
+            ),
+            (
+                "Flipkart Internet Private Limited",
+                "U51109KA2012PTC066107",
+                "E-Commerce & Supply Chain Automation",
+                "https://www.flipkart.com",
+                "Bengaluru, Karnataka (Bellandur)",
+                "India's homegrown e-commerce pioneer, building high-throughput distributed transaction engines, intelligent search ranking, and robotic supply chains."
+            ),
+            (
+                "PhonePe Private Limited",
+                "U72900KA2012PTC081944",
+                "FinTech, UPI & Digital Insurance",
+                "https://www.phonepe.com",
+                "Bengaluru, Karnataka (Green Glen Layout)",
+                "India's leading UPI payments platform handling over 50% of the country's digital retail payments with ultra-low latency distributed payment switches."
+            ),
+            (
+                "Wipro Limited",
+                "L32102KA1945PLC020800",
+                "IT Consulting, Cybersecurity & Cloud Infrastructure",
+                "https://www.wipro.com",
+                "Bengaluru, Karnataka (Sarjapur Road)",
+                "A leading multinational technology services and consulting company delivering end-to-end cloud, cybersecurity, and applied AI transformation."
+            ),
+            (
+                "HCL Technologies Limited",
+                "L74140DL1991PLC046369",
+                "Engineering R&D, Cybersecurity & Hybrid Cloud",
+                "https://www.hcltech.com",
+                "Noida, Uttar Pradesh (Tech Hub, Sector 126)",
+                "Global engineering R&D titan delivering chip-to-cloud software, aerospace telemetry, and enterprise cybersecurity across 60 countries."
+            ),
+            (
+                "Swiggy Limited",
+                "U74110KA2013PLC096530",
+                "On-Demand Delivery, Quick Commerce & AI Dispatch",
+                "https://www.swiggy.com",
+                "Bengaluru, Karnataka (Marathahalli)",
+                "India's pioneering on-demand convenience platform connecting consumers with thousands of restaurants and instant Instamart delivery pods."
+            )
         ]
 
         created_companies = []
@@ -202,18 +285,24 @@ def run_seed():
             db.commit()
             created_companies.append(comp)
 
-            # Add primary contact
+            # Add official university relations contact
             db.add(CompanyContact(
                 company_id=comp.id,
-                contact_name=f"Director of University Recruiting",
-                email=f"careers@{name.lower().split()[0]}.example.com",
-                phone="+1 (555) 012-3456",
-                designation="University Relations Lead",
+                contact_name="Head of University Relations & Campus Hiring",
+                email=f"campus-recruitment@{name.lower().split()[0].replace(',', '')}.in",
+                phone="+91 (080) 4123-8899",
+                designation="Director - Campus Talent Acquisition (India)",
                 is_primary=True
             ))
 
-            # Add realistic ratings from students
-            for _ in range(3):
+            # Add authentic student ratings
+            reviews_pool = [
+                "Outstanding engineering culture with massive scale. Mentors treat interns as full-time software engineers and provide direct ownership of critical PRs.",
+                "Fast-paced environment solving genuine Indian consumer challenges at scale. Weekly syncs with principal architects helped accelerate my career.",
+                "Excellent stipend, state-of-the-art office facilities, and high Pre-Placement Offer (PPO) conversion rates for performing college students.",
+                "Incredible learning curve! Built production-ready microservices handling thousands of requests per second during my 16-week tenure."
+            ]
+            for rev_text in reviews_pool[:3]:
                 student_rater = random.choice(all_student_users)
                 db.add(CompanyRating(
                     company_id=comp.id,
@@ -223,57 +312,258 @@ def run_seed():
                     learning_rating=random.randint(4, 5),
                     work_env_rating=random.randint(4, 5),
                     overall_rating=random.randint(4, 5),
-                    review="Exceptional mentorship program with senior engineers. Real responsibilities from week one and a very collaborative work environment."
+                    review=rev_text
                 ))
         db.commit()
 
-        # 5. 20 Realistic Internship Opportunities
+        # 5. 20 Real-World Indian Tech Internships with INR Stipends (₹)
+        # Note: Stipends reflect top tier Indian engineering campus internships (₹25,000 - ₹65,000/month)
         internships_spec = [
-            ("Apex Cloud Technologies", "Cloud Infrastructure Engineering Intern", "Software Engineering", WorkMode.REMOTE, 2800.0, 12, 3, ["Go", "Kubernetes", "AWS", "Terraform"]),
-            ("Apex Cloud Technologies", "Site Reliability Engineering (SRE) Intern", "DevOps & Cloud", WorkMode.HYBRID, 2600.0, 14, 2, ["Linux", "Python", "Prometheus", "Docker"]),
-            ("Quantum Nexus Labs", "Machine Learning Research Intern", "Artificial Intelligence", WorkMode.ON_SITE, 3500.0, 16, 2, ["PyTorch", "Python", "Transformers", "CUDA"]),
-            ("Quantum Nexus Labs", "Computer Vision Systems Intern", "Artificial Intelligence", WorkMode.HYBRID, 3200.0, 12, 1, ["OpenCV", "Python", "Deep Learning", "C++"]),
-            ("Vanguard Financial Tech", "Quantitative Software Engineer Intern", "Fintech", WorkMode.ON_SITE, 3800.0, 10, 4, ["C++", "Python", "Algorithms", "Low Latency"]),
-            ("Vanguard Financial Tech", "Full-Stack Web Platforms Intern", "Software Engineering", WorkMode.HYBRID, 2900.0, 12, 2, ["React", "TypeScript", "Node.js", "PostgreSQL"]),
-            ("CyberShield Defense Systems", "Security Operations & PenTesting Intern", "Cybersecurity", WorkMode.ON_SITE, 2700.0, 12, 3, ["Network Security", "Linux", "Python", "SIEM"]),
-            ("CyberShield Defense Systems", "Cloud Security Automation Intern", "Cybersecurity", WorkMode.REMOTE, 2950.0, 14, 2, ["AWS Security", "Python", "Terraform", "IAM"]),
-            ("BioGenix Healthcare Analytics", "Bioinformatics Data Science Intern", "Data Science", WorkMode.HYBRID, 2750.0, 16, 2, ["Python", "R", "Pandas", "Bioinformatics"]),
-            ("BioGenix Healthcare Analytics", "Healthcare Data Pipeline Engineer Intern", "Data Engineering", WorkMode.REMOTE, 2600.0, 12, 1, ["SQL", "Python", "ETL", "Spark"]),
-            ("InfraScale High-Performance Systems", "Kernel & Systems Software Intern", "Systems Engineering", WorkMode.ON_SITE, 3100.0, 16, 2, ["C", "Linux Kernel", "Memory Management"]),
-            ("InfraScale High-Performance Systems", "Distributed Storage Systems Intern", "Software Engineering", WorkMode.HYBRID, 3000.0, 14, 3, ["Go", "Distributed Systems", "RPC", "Raft"]),
-            ("Starlight Interactive Digital", "Graphics & Game Engine Programmer Intern", "Graphics & Gaming", WorkMode.ON_SITE, 2800.0, 12, 2, ["C++", "DirectX/Vulkan", "Shaders", "Math"]),
-            ("Starlight Interactive Digital", "Backend Multiplayer Services Intern", "Software Engineering", WorkMode.HYBRID, 2700.0, 12, 2, ["Node.js", "WebSockets", "Redis", "Docker"]),
-            ("Pulse Robotics Corporation", "Autonomous Navigation Systems Intern", "Robotics", WorkMode.ON_SITE, 3300.0, 16, 2, ["ROS2", "Python", "C++", "SLAM"]),
-            ("Pulse Robotics Corporation", "Embedded Firmware Engineer Intern", "Embedded Systems", WorkMode.ON_SITE, 2900.0, 12, 2, ["C", "RTOS", "Microcontrollers", "I2C"]),
-            ("Hyperion Renewable CleanEnergy", "Smart Grid IoT Data Analyst Intern", "CleanTech", WorkMode.HYBRID, 2500.0, 12, 3, ["Python", "SQL", "Time-series Analysis", "Tableau"]),
-            ("Hyperion Renewable CleanEnergy", "Full-Stack Energy Analytics Intern", "Software Engineering", WorkMode.REMOTE, 2650.0, 14, 2, ["React", "FastAPI", "PostgreSQL", "Charts"]),
-            ("Aether Design Studio & Labs", "Design Systems Engineer Intern", "UI/UX & Frontend", WorkMode.HYBRID, 2700.0, 12, 2, ["Figma", "React", "TypeScript", "Tailwind CSS"]),
-            ("Aether Design Studio & Labs", "Accessible Web Experiences Intern", "UI/UX & Frontend", WorkMode.REMOTE, 2400.0, 10, 1, ["Accessibility (a11y)", "HTML/CSS", "JavaScript"])
+            (
+                "Razorpay Software Private Limited",
+                "Backend Engineering Intern (FinTech Infrastructure)",
+                "Software Engineering",
+                WorkMode.HYBRID,
+                50000.0,
+                16,
+                4,
+                ["Go", "PostgreSQL", "Redis", "Kafka", "Docker"],
+                "Bengaluru, Karnataka"
+            ),
+            (
+                "Razorpay Software Private Limited",
+                "Full-Stack Web Engineering Intern",
+                "Software Engineering",
+                WorkMode.HYBRID,
+                45000.0,
+                12,
+                3,
+                ["React", "TypeScript", "Node.js", "Tailwind CSS"],
+                "Bengaluru, Karnataka"
+            ),
+            (
+                "Tata Consultancy Services (TCS)",
+                "Cloud DevOps & Platform Automation Intern",
+                "DevOps & Cloud",
+                WorkMode.HYBRID,
+                30000.0,
+                12,
+                8,
+                ["Linux", "Docker", "Kubernetes", "AWS", "Terraform"],
+                "Pune, Maharashtra (Hinjawadi)"
+            ),
+            (
+                "Tata Consultancy Services (TCS)",
+                "Cybersecurity & SOC Operations Intern",
+                "Cybersecurity",
+                WorkMode.ON_SITE,
+                28000.0,
+                14,
+                5,
+                ["Network Security", "Wireshark", "Linux", "SIEM", "Python"],
+                "Chennai, Tamil Nadu"
+            ),
+            (
+                "Infosys Limited",
+                "Enterprise Cloud Architecture Intern (Cobalt)",
+                "Software Engineering",
+                WorkMode.HYBRID,
+                32000.0,
+                16,
+                6,
+                ["Java", "Spring Boot", "Microservices", "MySQL"],
+                "Bengaluru, Karnataka (Electronics City)"
+            ),
+            (
+                "Infosys Limited",
+                "Generative AI & LLM Solutions Intern (Topaz)",
+                "Artificial Intelligence",
+                WorkMode.ON_SITE,
+                38000.0,
+                12,
+                4,
+                ["Python", "PyTorch", "Transformers", "LangChain", "FastAPI"],
+                "Hyderabad, Telangana"
+            ),
+            (
+                "Zomato Limited (Eternal)",
+                "Frontend React & Mobile Web Intern",
+                "UI/UX & Frontend",
+                WorkMode.HYBRID,
+                45000.0,
+                12,
+                3,
+                ["React", "TypeScript", "Next.js", "Web Performance"],
+                "Gurugram, Haryana"
+            ),
+            (
+                "Zomato Limited (Eternal)",
+                "Data Science & Supply-Demand Analytics Intern",
+                "Data Science",
+                WorkMode.ON_SITE,
+                50000.0,
+                16,
+                2,
+                ["Python", "SQL", "Pandas", "Scikit-Learn", "Tableau"],
+                "Gurugram, Haryana"
+            ),
+            (
+                "Flipkart Internet Private Limited",
+                "SDE Intern (High-Scale Catalog & Search Systems)",
+                "Software Engineering",
+                WorkMode.HYBRID,
+                60000.0,
+                16,
+                4,
+                ["Java", "Distributed Systems", "Elasticsearch", "Kafka"],
+                "Bengaluru, Karnataka"
+            ),
+            (
+                "Flipkart Internet Private Limited",
+                "Supply Chain Automation & Robotics Intern",
+                "Robotics & Automation",
+                WorkMode.ON_SITE,
+                45000.0,
+                12,
+                3,
+                ["Python", "C++", "ROS", "Computer Vision"],
+                "Hyderabad, Telangana"
+            ),
+            (
+                "PhonePe Private Limited",
+                "Low-Latency Distributed Systems Intern",
+                "Software Engineering",
+                WorkMode.HYBRID,
+                55000.0,
+                16,
+                3,
+                ["Java", "Go", "Distributed Systems", "Cassandra", "gRPC"],
+                "Bengaluru, Karnataka"
+            ),
+            (
+                "PhonePe Private Limited",
+                "FinTech Fraud Detection & Security Analyst Intern",
+                "Cybersecurity",
+                WorkMode.REMOTE,
+                40000.0,
+                12,
+                2,
+                ["Python", "SQL", "Cyber Threat Intelligence", "Machine Learning"],
+                "Bengaluru, Karnataka"
+            ),
+            (
+                "Reliance Jio Infocomm Limited",
+                "5G Core & Cloud-Native Network Software Intern",
+                "Telecommunications & Cloud",
+                WorkMode.ON_SITE,
+                35000.0,
+                16,
+                5,
+                ["Linux Kernel", "C++", "Docker", "Kubernetes", "Open5GS"],
+                "Navi Mumbai, Maharashtra"
+            ),
+            (
+                "Reliance Jio Infocomm Limited",
+                "IoT Smart Edge & Embedded Devices Intern",
+                "Embedded Systems",
+                WorkMode.HYBRID,
+                30000.0,
+                12,
+                4,
+                ["C", "Embedded C", "Microcontrollers", "MQTT", "Python"],
+                "Pune, Maharashtra"
+            ),
+            (
+                "Wipro Limited",
+                "Enterprise Java Microservices Engineering Intern",
+                "Software Engineering",
+                WorkMode.HYBRID,
+                26000.0,
+                12,
+                6,
+                ["Java", "Spring Boot", "PostgreSQL", "REST APIs"],
+                "Bengaluru, Karnataka"
+            ),
+            (
+                "Wipro Limited",
+                "Site Reliability Engineering (SRE) & Observability Intern",
+                "DevOps & Cloud",
+                WorkMode.REMOTE,
+                28000.0,
+                14,
+                3,
+                ["Linux", "Python", "Prometheus", "Grafana", "Ansible"],
+                "Hyderabad, Telangana"
+            ),
+            (
+                "HCL Technologies Limited",
+                "Computer Vision & Edge AI Research Intern",
+                "Artificial Intelligence",
+                WorkMode.HYBRID,
+                35000.0,
+                16,
+                3,
+                ["Python", "OpenCV", "TensorFlow", "Edge Computing"],
+                "Noida, Uttar Pradesh"
+            ),
+            (
+                "HCL Technologies Limited",
+                "Embedded Automotive Systems Firmware Intern",
+                "Embedded Systems",
+                WorkMode.ON_SITE,
+                32000.0,
+                12,
+                4,
+                ["Embedded C", "CAN Bus", "RTOS", "Automotive SPICE"],
+                "Chennai, Tamil Nadu"
+            ),
+            (
+                "Swiggy Limited",
+                "Machine Learning & Dispatch Optimization Intern",
+                "Data Science & AI",
+                WorkMode.HYBRID,
+                50000.0,
+                16,
+                2,
+                ["Python", "PyTorch", "Operations Research", "SQL", "Pandas"],
+                "Bengaluru, Karnataka"
+            ),
+            (
+                "Swiggy Limited",
+                "Design Systems & Product UI/UX Intern",
+                "UI/UX & Design",
+                WorkMode.REMOTE,
+                35000.0,
+                12,
+                2,
+                ["Figma", "Design Systems", "Prototyping", "User Research"],
+                "Bengaluru, Karnataka"
+            )
         ]
 
         created_internships = []
         comp_map = {c.name: c for c in created_companies}
 
-        for comp_name, title, domain, mode, stipend, duration, openings, skills in internships_spec:
+        for comp_name, title, domain, mode, stipend, duration, openings, skills, loc in internships_spec:
             company_obj = comp_map[comp_name]
-            start_d = date.today() + timedelta(days=45)
+            start_d = date.today() + timedelta(days=40)
             end_d = start_d + timedelta(weeks=duration)
-            deadline = date.today() + timedelta(days=25)
+            deadline = date.today() + timedelta(days=20)
 
             internship = Internship(
                 company_id=company_obj.id,
                 posted_by_user_id=faculty_user.id,
                 title=title,
                 domain=domain,
-                description=f"Join {comp_name} for an immersive {duration}-week internship. You will collaborate directly with seasoned principal engineers to solve mission-critical challenges in {domain.lower()}.",
-                responsibilities="• Design and implement production features following clean architecture standards.\n• Write comprehensive automated unit and integration tests.\n• Participate in sprint planning, architectural design reviews, and daily standups.\n• Present end-of-internship capstone project to executive leadership.",
-                requirements=f"• Enrolled in a Bachelor's or Master's degree in Computer Science, Engineering, or related technical field.\n• Strong foundation in {', '.join(skills[:2])}.\n• GPA of 3.0 or higher preferred.\n• Demonstrated passion for solving complex technical problems.",
-                eligibility_criteria="Available full-time during the designated term. Authorized to work or qualifying for academic curricular practical training.",
-                benefits=f"• Competitive monthly stipend of ${stipend:,.0f} USD.\n• Dedicated 1-on-1 mentorship from a senior staff engineer.\n• Full access to company technical libraries and cloud credits.\n• High consideration for full-time post-graduation offer.",
-                location=company_obj.location,
+                description=f"Join {comp_name} for an intensive {duration}-week campus internship. You will collaborate directly with seasoned engineering architects in {loc} to engineer resilient, high-volume systems powering India's tech ecosystem.",
+                responsibilities="• Design, implement, and benchmark production-grade microservices aligned with strict engineering guidelines.\n• Write high-coverage automated unit, integration, and load tests.\n• Participate actively in agile sprint planning, technical RFCs, and daily scrums.\n• Present final end-of-term capstone deliverables to departmental leadership and corporate mentors.",
+                requirements=f"• Currently pursuing B.Tech / M.Tech in Computer Engineering, Information Technology, AI & Data Science, or allied disciplines.\n• Proven mastery in {', '.join(skills[:2])}.\n• Minimum CGPA of 7.0/10.0 with no active academic backlogs.\n• Solid understanding of Data Structures, Algorithms, and Software Engineering principles.",
+                eligibility_criteria="Available for full-time on-site/hybrid internship during the upcoming semester. College NOC (No Objection Certificate) required upon selection.",
+                benefits=f"• Attractive monthly stipend of ₹{stipend:,.0f} INR.\n• Dedicated 1-on-1 industry mentorship from a senior tech lead.\n• Pre-Placement Offer (PPO) evaluation opportunity upon exemplary performance.\n• Corporate laptop, wellness allowances, and verified institutional certification.",
+                location=loc,
                 work_mode=mode,
                 stipend_amount=stipend,
-                stipend_currency="USD",
+                stipend_currency="INR",
                 duration_weeks=duration,
                 openings=openings,
                 start_date=start_d,
@@ -281,54 +571,59 @@ def run_seed():
                 application_deadline=deadline,
                 skills_required=skills,
                 status=InternshipStatus.APPROVED,
-                is_featured=(stipend >= 3000.0)
+                is_featured=(stipend >= 45000.0)
             )
             db.add(internship)
             db.commit()
             created_internships.append(internship)
 
-        # 6. Realistic Applications, Timelines, Interviews & Evaluations
-        print("📝 Generating realistic applications, interviews, and evaluations...")
+        # 6. Realistic Applications, Status Timelines, Campus Interviews & AICTE 7-Criteria Evaluations
+        print("📝 Generating realistic applications, interviews, and ABET/AICTE evaluations...")
 
-        # Application 1: Aiden Reynolds -> Apex Cloud Infrastructure Intern (ACCEPTED)
+        # Application 1: Aarav Sharma -> Razorpay Backend Engineering Intern (ACCEPTED with PPO Track)
         app1 = Application(
             internship_id=created_internships[0].id,
             student_id=primary_student.id,
-            resume_url="/api/v1/files/download/aiden_reynolds_resume.pdf",
-            cover_letter="I am enthusiastic about applying for the Cloud Infrastructure Engineering Internship at Apex Cloud Technologies. Having architected distributed microservices and container orchestration platforms in university projects, I am eager to contribute to your core governance infrastructure.",
-            qualifications={"gpa": 3.88, "degree": "B.S. Computer Science", "graduation_year": 2026, "relevant_coursework": "Operating Systems, Distributed Systems, Cloud Computing"},
+            resume_url="/api/v1/files/download/aarav_sharma_cse_resume.pdf",
+            cover_letter="Respected Hiring Committee at Razorpay, I am writing to express my enthusiastic application for the Backend Engineering Internship position. Having developed high-throughput transaction pipelines in Go and published research on distributed locking mechanisms, I am passionate about contributing to Razorpay's mission-critical payment switches.",
+            qualifications={
+                "cgpa": "9.24 / 10.0",
+                "degree": "B.Tech in Computer Engineering",
+                "university": "COEP Technological University, Pune",
+                "relevant_coursework": "Distributed Systems, Database Engineering, Algorithms, Operating Systems"
+            },
             status=ApplicationStatus.ACCEPTED,
-            faculty_notes="Exceptional candidate with stellar systems architecture knowledge and top-tier interview performance.",
+            faculty_notes="Ranked in top 2% of the batch. Exceptional coding round score (100/100) and exemplary systems knowledge during the technical screening.",
             faculty_rating=5
         )
         db.add(app1)
         db.commit()
 
-        # Timelines for app1
-        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.PENDING, comment="Application received", changed_by_user_id=primary_student.id, created_at=datetime.utcnow() - timedelta(days=14)))
-        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.SHORTLISTED, comment="Shortlisted for preliminary screening", changed_by_user_id=faculty_user.id, created_at=datetime.utcnow() - timedelta(days=10)))
-        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.INTERVIEW_SCHEDULED, comment="Technical interview scheduled", changed_by_user_id=faculty_user.id, created_at=datetime.utcnow() - timedelta(days=7)))
-        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.ACCEPTED, comment="Official internship offer extended by Apex Cloud Technologies", changed_by_user_id=admin_user.id, created_at=datetime.utcnow() - timedelta(days=1)))
+        # Application 1 Timeline
+        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.PENDING, comment="Application successfully submitted via College TPO Portal", changed_by_user_id=primary_student.id, created_at=datetime.utcnow() - timedelta(days=14)))
+        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.SHORTLISTED, comment="Resume shortlisted based on CGPA and SIH finalist portfolio", changed_by_user_id=faculty_user.id, created_at=datetime.utcnow() - timedelta(days=10)))
+        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.INTERVIEW_SCHEDULED, comment="Technical round scheduled with Razorpay Core Payments team", changed_by_user_id=faculty_user.id, created_at=datetime.utcnow() - timedelta(days=6)))
+        db.add(ApplicationStatusHistory(application_id=app1.id, status=ApplicationStatus.ACCEPTED, comment="Formal Internship Offer Letter released (₹50,000/month stipend)", changed_by_user_id=admin_user.id, created_at=datetime.utcnow() - timedelta(days=1)))
         db.commit()
 
-        # Interview for app1 (Completed, Passed)
+        # Interview for App 1 (Completed, Passed)
         iv1 = Interview(
             application_id=app1.id,
             scheduled_by_user_id=faculty_user.id,
-            interviewer_name="Sarah Jenkins (Principal Cloud Architect)",
-            interviewer_email="sarah.jenkins@apexcloud.example.com",
-            round_name="Technical Architecture & Systems Coding",
-            scheduled_at=datetime.utcnow() - timedelta(days=4),
+            interviewer_name="Vikramaditya Sengupta (Staff Engineer - Razorpay)",
+            interviewer_email="vikramaditya.s@razorpay.in",
+            round_name="Technical Architecture & Distributed Systems Coding",
+            scheduled_at=datetime.utcnow() - timedelta(days=3),
             duration_minutes=60,
-            location_or_link="Google Meet: https://meet.google.com/apx-cld-eng",
+            location_or_link="Google Meet: https://meet.google.com/rzp-campus-eng",
             status=InterviewStatus.COMPLETED,
-            feedback="Aiden showed deep understanding of Raft consensus, Go concurrency primitives, and Kubernetes custom resource definitions.",
+            feedback="Aarav demonstrated stellar command of concurrency primitives in Go, distributed transaction boundaries (2PC vs Saga), and database index optimization in PostgreSQL.",
             result=InterviewResult.PASSED
         )
         db.add(iv1)
         db.commit()
 
-        # Evaluation for app1
+        # Evaluation for App 1 (AICTE / ABET Outcome-Based Rubrics)
         db.add(Evaluation(
             application_id=app1.id,
             internship_id=app1.internship_id,
@@ -337,59 +632,59 @@ def run_seed():
             technical_score=5,
             communication_score=5,
             problem_solving_score=5,
-            teamwork_score=4,
+            teamwork_score=5,
             punctuality_score=5,
             responsibility_score=5,
             learning_ability_score=5,
-            overall_score=4.86,
-            strengths="In-depth technical knowledge of distributed systems, outstanding communication, and structured approach to debugging.",
-            areas_for_improvement="Continue exploring eBPF and advanced kernel observability.",
-            comments="Unanimous recommendation for placement offer.",
+            overall_score=5.0,
+            strengths="Flawless mastery over high-throughput systems, clear architectural diagrams, and structured articulation of trade-offs.",
+            areas_for_improvement="Explore zero-knowledge proofs and emerging cryptography primitives in modern fintech.",
+            comments="Outstanding candidate. Unanimous recommendation for Pre-Placement Offer (PPO) post-internship.",
             hiring_recommendation=HiringRecommendation.STRONGLY_RECOMMEND
         ))
 
-        # Application 2: Aiden Reynolds -> Quantum Nexus Machine Learning (SHORTLISTED)
+        # Application 2: Aarav Sharma -> Flipkart SDE Intern (SHORTLISTED)
         app2 = Application(
-            internship_id=created_internships[2].id,
+            internship_id=created_internships[8].id,
             student_id=primary_student.id,
-            resume_url="/api/v1/files/download/aiden_reynolds_resume.pdf",
-            cover_letter="My background in parallel computing and deep learning makes me excited about research at Quantum Nexus Labs.",
-            qualifications={"gpa": 3.88, "degree": "B.S. Computer Science"},
+            resume_url="/api/v1/files/download/aarav_sharma_cse_resume.pdf",
+            cover_letter="Flipkart's engineering challenges at Big Billion Days scale represent the peak of Indian systems engineering. I am keen to tackle high-throughput catalog indexing and real-time event streaming.",
+            qualifications={"cgpa": "9.24 / 10.0", "degree": "B.Tech Computer Engineering"},
             status=ApplicationStatus.SHORTLISTED,
-            faculty_notes="Resume approved by faculty coordinator; awaiting company schedule.",
-            faculty_rating=4
+            faculty_notes="Resume approved by Department Placement Committee; forwarded to Flipkart Campus Recruiting.",
+            faculty_rating=5
         )
         db.add(app2)
         db.commit()
 
-        db.add(ApplicationStatusHistory(application_id=app2.id, status=ApplicationStatus.PENDING, comment="Application submitted", changed_by_user_id=primary_student.id, created_at=datetime.utcnow() - timedelta(days=6)))
-        db.add(ApplicationStatusHistory(application_id=app2.id, status=ApplicationStatus.SHORTLISTED, comment="Candidate shortlisted based on technical credentials", changed_by_user_id=faculty_user.id, created_at=datetime.utcnow() - timedelta(days=2)))
+        db.add(ApplicationStatusHistory(application_id=app2.id, status=ApplicationStatus.PENDING, comment="Online application submitted", changed_by_user_id=primary_student.id, created_at=datetime.utcnow() - timedelta(days=7)))
+        db.add(ApplicationStatusHistory(application_id=app2.id, status=ApplicationStatus.SHORTLISTED, comment="Shortlisted for Technical Assessment Round 1", changed_by_user_id=faculty_user.id, created_at=datetime.utcnow() - timedelta(days=2)))
         db.commit()
 
-        # Upcoming Interview for app2
+        # Upcoming Interview for App 2
         db.add(Interview(
             application_id=app2.id,
             scheduled_by_user_id=faculty_user.id,
-            interviewer_name="Dr. Aris Thorne (Head of Robotics AI)",
-            interviewer_email="aris.thorne@quantumnexus.example.com",
-            round_name="Machine Learning Algorithms & Research Deep Dive",
-            scheduled_at=datetime.utcnow() + timedelta(days=3, hours=4),
-            duration_minutes=45,
-            location_or_link="Zoom: https://quantumnexus.zoom.us/j/849201849",
+            interviewer_name="Deepak Narang (Principal Architect - Flipkart)",
+            interviewer_email="deepak.n@flipkart.com",
+            round_name="Data Structures & High-Scale Systems Design",
+            scheduled_at=datetime.utcnow() + timedelta(days=2, hours=3),
+            duration_minutes=60,
+            location_or_link="Microsoft Teams: https://teams.microsoft.com/l/meetup-join/flipkart-campus",
             status=InterviewStatus.SCHEDULED,
             result=InterviewResult.PENDING
         ))
 
-        # Application 3: Aiden Reynolds -> Vanguard Quantitative Software Engineer (INTERVIEW_SCHEDULED)
+        # Application 3: Aarav Sharma -> PhonePe Low-Latency Systems (INTERVIEW_SCHEDULED)
         app3 = Application(
-            internship_id=created_internships[4].id,
+            internship_id=created_internships[10].id,
             student_id=primary_student.id,
-            resume_url="/api/v1/files/download/aiden_reynolds_resume.pdf",
-            cover_letter="Passionate about low-latency algorithms and high-frequency order execution systems.",
-            qualifications={"gpa": 3.88, "skills": ["C++", "Python", "Algorithms"]},
+            resume_url="/api/v1/files/download/aarav_sharma_cse_resume.pdf",
+            cover_letter="PhonePe's UPI infrastructure handles massive scale with sub-millisecond latencies. My deep background in network sockets and caching aligns directly with your platform team.",
+            qualifications={"cgpa": "9.24 / 10.0", "skills": ["Go", "Java", "Redis", "gRPC"]},
             status=ApplicationStatus.INTERVIEW_SCHEDULED,
-            faculty_notes="Strong algorithmic background.",
-            faculty_rating=4
+            faculty_notes="Strong algorithmic candidate with top percentile in national coding leagues.",
+            faculty_rating=5
         )
         db.add(app3)
         db.commit()
@@ -397,17 +692,17 @@ def run_seed():
         db.add(Interview(
             application_id=app3.id,
             scheduled_by_user_id=faculty_user.id,
-            interviewer_name="Michael Sterling (VP Quantitative Development)",
-            interviewer_email="michael.s@vanguardfin.example.com",
-            round_name="Algorithms & Data Structures Round",
-            scheduled_at=datetime.utcnow() + timedelta(days=5, hours=2),
-            duration_minutes=60,
-            location_or_link="Google Meet: https://meet.google.com/van-quant-tech",
+            interviewer_name="Rohit Agrawal (Director of Engineering - PhonePe)",
+            interviewer_email="rohit.a@phonepe.com",
+            round_name="Low-Level Design & Concurrency Coding",
+            scheduled_at=datetime.utcnow() + timedelta(days=4, hours=5),
+            duration_minutes=45,
+            location_or_link="Google Meet: https://meet.google.com/php-campus-drive",
             status=InterviewStatus.SCHEDULED,
             result=InterviewResult.PENDING
         ))
 
-        # Additional 25 applications across other students to provide rich realistic numbers
+        # Additional 25 applications across other students
         statuses = [
             ApplicationStatus.PENDING, ApplicationStatus.SHORTLISTED,
             ApplicationStatus.INTERVIEW_SCHEDULED, ApplicationStatus.ACCEPTED,
@@ -421,11 +716,11 @@ def run_seed():
             app = Application(
                 internship_id=target_internship.id,
                 student_id=student.id,
-                resume_url=f"/api/v1/files/download/{student.first_name.lower()}_resume.pdf",
-                cover_letter=f"Dear Hiring Committee, I am writing to express my eager interest in the {target_internship.title} position at {target_internship.company.name}. My academic background in {student.student_profile.department} and hands-on projects align directly with your requirements.",
-                qualifications={"gpa": student.student_profile.gpa, "department": student.student_profile.department},
+                resume_url=f"/api/v1/files/download/{student.first_name.lower()}_{student.last_name.lower()}_resume.pdf",
+                cover_letter=f"Respected Placement Committee, I wish to apply for the {target_internship.title} position at {target_internship.company.name}. My academic coursework at COEP Tech University and hands-on projects directly align with your requirements.",
+                qualifications={"cgpa": f"{student.student_profile.gpa} / 10.0", "department": student.student_profile.department},
                 status=selected_status,
-                faculty_notes="Candidate reviewed and verified by department placement advisor.",
+                faculty_notes="Candidate reviewed and recommended by Department T&P Advisor.",
                 faculty_rating=random.randint(3, 5)
             )
             db.add(app)
@@ -435,7 +730,7 @@ def run_seed():
             db.add(ApplicationStatusHistory(
                 application_id=app.id,
                 status=ApplicationStatus.PENDING,
-                comment="Initial application registered",
+                comment="Campus drive application recorded",
                 changed_by_user_id=student.id,
                 created_at=datetime.utcnow() - timedelta(days=random.randint(10, 20))
             ))
@@ -444,27 +739,27 @@ def run_seed():
                 db.add(ApplicationStatusHistory(
                     application_id=app.id,
                     status=selected_status,
-                    comment=f"Application marked as {selected_status.value}",
+                    comment=f"Application stage updated to {selected_status.value}",
                     changed_by_user_id=faculty_user.id,
                     created_at=datetime.utcnow() - timedelta(days=random.randint(1, 8))
                 ))
 
-            # If interview scheduled or accepted, add interview
+            # Interviews
             if selected_status in [ApplicationStatus.INTERVIEW_SCHEDULED, ApplicationStatus.ACCEPTED]:
                 db.add(Interview(
                     application_id=app.id,
                     scheduled_by_user_id=faculty_user.id,
-                    interviewer_name=f"Lead Architect @ {target_internship.company.name}",
-                    interviewer_email=f"interviews@{target_internship.company.name.lower().split()[0]}.example.com",
-                    round_name="Technical & Culture Alignment",
+                    interviewer_name=f"Campus Tech Panel @ {target_internship.company.name}",
+                    interviewer_email=f"campus@{target_internship.company.name.lower().split()[0].replace(',', '')}.in",
+                    round_name="Technical & Problem Solving Round",
                     scheduled_at=datetime.utcnow() + timedelta(days=random.randint(2, 7), hours=random.randint(9, 16)),
                     duration_minutes=45,
-                    location_or_link=f"Google Meet / Room {random.randint(101, 305)}",
+                    location_or_link=f"Google Meet / Seminar Hall {random.randint(1, 4)}",
                     status=InterviewStatus.SCHEDULED if selected_status == ApplicationStatus.INTERVIEW_SCHEDULED else InterviewStatus.COMPLETED,
                     result=InterviewResult.PENDING if selected_status == ApplicationStatus.INTERVIEW_SCHEDULED else InterviewResult.PASSED
                 ))
 
-            # If accepted, add evaluation
+            # Evaluations
             if selected_status == ApplicationStatus.ACCEPTED:
                 db.add(Evaluation(
                     application_id=app.id,
@@ -478,35 +773,35 @@ def run_seed():
                     punctuality_score=5,
                     responsibility_score=random.randint(4, 5),
                     learning_ability_score=5,
-                    overall_score=round(random.uniform(4.2, 4.9), 2),
-                    strengths="Strong problem formulation skills, dependable team player, quick adaptation.",
+                    overall_score=round(random.uniform(4.3, 4.9), 2),
+                    strengths="Strong analytical thinking, adherence to clean coding principles, and effective collaboration.",
                     comments="Recommended for placement.",
                     hiring_recommendation=HiringRecommendation.RECOMMEND
                 ))
 
         db.commit()
 
-        # 7. Notifications for Primary Student
+        # 7. Notifications for Primary Student (Aarav Sharma)
         db.add(Notification(
             user_id=primary_student.id,
             title="Internship Offer Extended! 🎉",
-            message="Congratulations! Apex Cloud Technologies has officially accepted your application for Cloud Infrastructure Engineering Intern.",
+            message="Congratulations Aarav! Razorpay has officially released your offer for Backend Engineering Intern (Stipend: ₹50,000/month).",
             category=NotificationCategory.APPLICATION,
             link="/student/applications",
             is_read=False
         ))
         db.add(Notification(
             user_id=primary_student.id,
-            title="Interview Invitation: Quantum Nexus Labs",
-            message="You have an upcoming Machine Learning Algorithms interview with Dr. Aris Thorne scheduled in 3 days.",
+            title="Campus Interview Call: Flipkart 🚀",
+            message="Your Technical Systems round with Principal Architect Deepak Narang is scheduled in 2 days at 11:30 AM IST.",
             category=NotificationCategory.INTERVIEW,
             link="/student/interviews",
             is_read=False
         ))
         db.add(Notification(
             user_id=primary_student.id,
-            title="Evaluation Report Available",
-            message="Faculty coordinator Prof. Marcus Sterling has submitted your evaluation with an overall score of 4.86/5.0.",
+            title="AICTE Faculty Evaluation Report Available",
+            message="T&P Coordinator Prof. Sunita Sharma has submitted your semester performance review (Overall Score: 5.0/5.0).",
             category=NotificationCategory.EVALUATION,
             link="/student/applications",
             is_read=True
@@ -518,17 +813,17 @@ def run_seed():
             target_type=FeedbackTargetType.COMPANY,
             target_id=created_companies[0].id,
             rating=5,
-            title="Incredible Recruitment Experience at Apex Cloud",
-            comment="The interview process was rigorous yet respectful. Feedback was timely and the engineering team demonstrated high technical standards.",
+            title="Exceptional Campus Drive Process at Razorpay",
+            comment="The technical problem statements reflected genuine production challenges. Mentors and panelists were very supportive and provided actionable feedback.",
             status=FeedbackStatus.RESOLVED,
-            admin_response="Thank you for sharing your experience. We are proud of our industry partnership with Apex Cloud."
+            admin_response="Thank you for your feedback Aarav. The Training & Placement Office appreciates Razorpay's continued partnership with our university."
         ))
         db.add(Feedback(
             from_user_id=primary_student.id,
             target_type=FeedbackTargetType.SYSTEM,
             rating=5,
-            title="Platform UI & Tracking Experience",
-            comment="The application tracking timeline and notifications make keeping track of interviews effortless. Excellent experience!",
+            title="Seamless TPO Application & Interview Tracking",
+            comment="The multi-step application wizard, real-time status updates, and interview calendar have made our placement season completely paperless and transparent!",
             status=FeedbackStatus.SUBMITTED
         ))
 
@@ -538,30 +833,30 @@ def run_seed():
             user_email=admin_user.email,
             action="SYSTEM_INIT",
             entity_type="SYSTEM",
-            details="College Internship Management System database initialized with production seeds."
+            details="College Internship Management System database initialized with Indian collegiate & enterprise placement dataset."
         ))
         db.add(AuditLog(
             user_id=faculty_user.id,
             user_email=faculty_user.email,
             action="CREATE_INTERNSHIP",
             entity_type="INTERNSHIP",
-            details="Created 20 corporate internship postings."
+            details="Created 20 verified corporate internship postings with INR stipends across Bengaluru, Pune, Hyderabad, and Mumbai."
         ))
         db.add(AuditLog(
             user_id=admin_user.id,
             user_email=admin_user.email,
             action="APPROVE_INTERNSHIP",
             entity_type="INTERNSHIP",
-            details="Approved all verified partner company internship opportunities."
+            details="Approved all verified Indian partner company drives (TCS, Infosys, Razorpay, Zomato, Flipkart, PhonePe, Jio, Swiggy, HCLTech, Wipro)."
         ))
 
         # 10. Bookmarks for primary student
         db.add(Bookmark(user_id=primary_student.id, internship_id=created_internships[0].id))
-        db.add(Bookmark(user_id=primary_student.id, internship_id=created_internships[2].id))
-        db.add(Bookmark(user_id=primary_student.id, internship_id=created_internships[4].id))
+        db.add(Bookmark(user_id=primary_student.id, internship_id=created_internships[8].id))
+        db.add(Bookmark(user_id=primary_student.id, internship_id=created_internships[10].id))
 
         db.commit()
-        print("✅ Database seeding successfully finished!")
+        print("✅ Indian University & Placement Database seeding successfully completed!")
 
     except Exception as e:
         db.rollback()

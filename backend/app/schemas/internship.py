@@ -15,7 +15,7 @@ class InternshipBase(BaseModel):
     location: str = Field(..., min_length=2)
     work_mode: WorkMode = WorkMode.HYBRID
     stipend_amount: float = Field(0.0, ge=0.0)
-    stipend_currency: str = "USD"
+    stipend_currency: str = "INR"
     duration_weeks: int = Field(..., ge=4, le=26)
     openings: int = Field(1, ge=1)
     start_date: date

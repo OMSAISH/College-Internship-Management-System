@@ -162,9 +162,9 @@ export const InternshipDetailPage: React.FC = () => {
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Stipend</span>
             <span className="text-base font-bold text-slate-900 dark:text-white">
-              ${internship.stipend_amount.toLocaleString()} USD
+              ₹{internship.stipend_amount.toLocaleString()}
             </span>
-            <span className="text-[10px] text-slate-400 block">per month</span>
+            <span className="text-[10px] text-slate-400 block">per month (INR)</span>
           </div>
 
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
@@ -265,7 +265,7 @@ export const InternshipDetailPage: React.FC = () => {
                     <h4 className="font-bold text-sm text-slate-900 dark:text-white hover:text-brand-600">
                       <Link to={`/internships/${s.id}`}>{s.title}</Link>
                     </h4>
-                    <p className="text-xs text-slate-500 mt-0.5">{s.company?.name} • ${s.stipend_amount}/mo</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{s.company?.name} • ₹{s.stipend_amount.toLocaleString()}/mo</p>
                   </Card>
                 ))}
               </div>

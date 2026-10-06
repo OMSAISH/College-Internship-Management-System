@@ -21,7 +21,7 @@ export const FacultyCreateInternship: React.FC = () => {
     title: '',
     domain: 'Software Engineering',
     work_mode: 'HYBRID' as WorkMode,
-    stipend_amount: 2500,
+    stipend_amount: 35000,
     duration_weeks: 12,
     openings: 2,
     location: '',
@@ -178,7 +178,7 @@ export const FacultyCreateInternship: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
-              label="Monthly Stipend ($ USD) *"
+              label="Monthly Stipend (₹ INR) *"
               type="number"
               min="0"
               value={formData.stipend_amount}

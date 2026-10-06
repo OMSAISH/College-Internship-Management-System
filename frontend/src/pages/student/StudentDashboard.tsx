@@ -208,7 +208,7 @@ export const StudentDashboard: React.FC = () => {
 
                   <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
                     <span className="font-bold text-slate-900 dark:text-white">
-                      ${internship.stipend_amount.toLocaleString()}/mo
+                      ₹{internship.stipend_amount.toLocaleString()}/mo
                     </span>
                     <Link to={`/internships/${internship.id}`}>
                       <Button size="sm">View Role</Button>

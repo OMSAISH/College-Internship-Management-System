@@ -31,36 +31,36 @@ export const LandingPage: React.FC = () => {
     api.getAnalyticsDashboard()
       .then(res => setStats(res.overview))
       .catch(() => {
-        // Fallback realistic defaults
+        // Fallback realistic defaults for Indian engineering institutions
         setStats({
-          total_students: 1250,
-          total_companies: 84,
-          active_internships: 48,
-          total_applications: 3420,
-          total_interviews: 610,
-          total_placements: 420,
-          placement_rate: 94.2,
-          average_stipend: 2750
+          total_students: 2450,
+          total_companies: 120,
+          active_internships: 65,
+          total_applications: 5120,
+          total_interviews: 890,
+          total_placements: 610,
+          placement_rate: 96.8,
+          average_stipend: 42500
         });
       });
   }, []);
 
   const faqs = [
     {
-      q: "How does the University Internship Management System work for students?",
-      a: "Students complete an institutional profile, upload their verified PDF resume, discover approved corporate internships, submit multi-step applications, track status progressions, attend scheduled interviews, and receive academic evaluation credits."
+      q: "How does the College Internship Management System (CIMS) work for Indian students?",
+      a: "Students complete their institutional profile with verified PRN / Roll numbers, upload their PDF resumes, discover approved corporate internships (TCS, Infosys, Razorpay, Zomato, etc.), apply via multi-step wizard, attend scheduled interviews, and receive academic credits per AICTE guidelines."
     },
     {
-      q: "Can faculty members and internship coordinators monitor candidate progress?",
-      a: "Yes! Faculty coordinators have a dedicated portal to review student applications, shortlist or reject candidates, coordinate interview schedules with corporate recruiters, and record standardized 7-criteria performance evaluations."
+      q: "Can Training & Placement Officers (TPOs) and faculty coordinators monitor drives?",
+      a: "Yes! TPOs and departmental coordinators have a dedicated console to filter student applications by CGPA & branch, manage company drives, schedule campus interviews, and record AICTE/ABET 7-criteria evaluations."
     },
     {
-      q: "How are company registrations and internship postings approved?",
-      a: "All corporate partners submit official registration numbers and contact details. Postings undergo administrative screening before appearing on the public student marketplace, ensuring verified and quality opportunities."
+      q: "How are partner companies verified before posting opportunities?",
+      a: "All corporate partners must provide valid Indian Corporate Identification Numbers (CIN) and registered university relations contacts before internship drives are approved by college administration."
     },
     {
       q: "What evaluation criteria are used for internship performance?",
-      a: "Our standardized rubric evaluates Technical Skills, Communication, Problem Solving, Teamwork, Punctuality, Responsibility, and Learning Ability on a 1-5 scale with automated scoring and hiring recommendations."
+      a: "Our standardized rubric evaluates Technical & Engineering Problem Solving, Design & Development, Tool Proficiency, Code Quality & Testing, Ethics, Teamwork, and Communication on a 1-5 scale."
     }
   ];
 
@@ -74,7 +74,7 @@ export const LandingPage: React.FC = () => {
             
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950/80 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
               <Sparkles className="w-3.5 h-3.5 text-brand-600" />
-              <span>Official Institutional Internship & Career Gateway 2026</span>
+              <span>Official University Training & Placement Gateway 2026 • AICTE Compliant</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
@@ -85,7 +85,7 @@ export const LandingPage: React.FC = () => {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-              Connecting ambitious university students, departmental faculty coordinators, and world-class enterprise partners across the entire internship journey from discovery to placement evaluation.
+              Connecting engineering students, Training & Placement Officers (TPO), and India's top tech enterprises & GCCs across the complete internship lifecycle from discovery to Pre-Placement Offers (PPO).
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
@@ -266,7 +266,7 @@ export const LandingPage: React.FC = () => {
               <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <div>
                   <span className="text-sm font-bold text-slate-900 dark:text-white">
-                    ${internship.stipend_amount.toLocaleString()}
+                    ₹{internship.stipend_amount.toLocaleString()}
                   </span>
                   <span className="text-xs text-slate-400"> / month</span>
                 </div>
@@ -298,10 +298,10 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2">For Students</h3>
               <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                <li>• Unified discovery across all corporate hiring partners.</li>
-                <li>• Real-time application timeline status updates.</li>
-                <li>• Interview scheduling alerts and direct meeting links.</li>
-                <li>• Comprehensive performance ratings and constructive feedback.</li>
+                <li>• Unified discovery across all top Indian tech and product companies.</li>
+                <li>• Real-time application timeline status updates & NOC tracking.</li>
+                <li>• Campus interview scheduling alerts and direct meeting links.</li>
+                <li>• AICTE / ABET outcome-based performance evaluations and credit clearance.</li>
               </ul>
             </Card>
 
@@ -309,12 +309,12 @@ export const LandingPage: React.FC = () => {
               <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4">
                 <GraduationCap className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2">For Faculty Coordinators</h3>
+              <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2">For TPO & Faculty Coordinators</h3>
               <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                <li>• Easy candidate profile review with GPA and skills filtering.</li>
-                <li>• One-click shortlisting, rejection, and interview dispatch.</li>
-                <li>• Multi-criteria academic evaluation rubric integration.</li>
-                <li>• Departmental placement summary reports and analytics.</li>
+                <li>• Automated candidate profile screening with CGPA and backlog checks.</li>
+                <li>• One-click shortlisting, rejection, and interview slot dispatch.</li>
+                <li>• AICTE 7-criteria outcome-based rubrics integration.</li>
+                <li>• Comprehensive branch-wise placement reports and NIRF accreditation analytics.</li>
               </ul>
             </Card>
 
@@ -324,10 +324,10 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2">For Partner Companies</h3>
               <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                <li>• Direct access to pre-screened, top-ranked university talent.</li>
-                <li>• Company branding profile with reviews and alumni ratings.</li>
-                <li>• Structured internship postings and candidate applications.</li>
-                <li>• High conversion to post-graduation full-time hiring.</li>
+                <li>• Direct access to pre-screened, top-ranked engineering talent.</li>
+                <li>• Company branding profile with verified campus alumni ratings.</li>
+                <li>• Structured campus hiring drives and verified candidate credentials.</li>
+                <li>• High Pre-Placement Offer (PPO) conversion to full-time SDE roles.</li>
               </ul>
             </Card>
           </div>
@@ -339,7 +339,7 @@ export const LandingPage: React.FC = () => {
         <div className="text-center max-w-2xl mx-auto mb-10">
           <Badge variant="brand" className="mb-2">Industry Network</Badge>
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-            Trusted by Premier Recruiters
+            Trusted by India's Top Tech Recruiters
           </h2>
         </div>
 
@@ -367,7 +367,7 @@ export const LandingPage: React.FC = () => {
         <div className="text-center max-w-2xl mx-auto mb-10">
           <Badge variant="brand" className="mb-2">Student & Recruiter Voice</Badge>
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-            What Our Community Says
+            What Our Campus Community Says
           </h2>
         </div>
 
@@ -377,15 +377,15 @@ export const LandingPage: React.FC = () => {
               {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />)}
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
-              "The structured timeline on CIMS made tracking my Apex Cloud application effortless. I received interview notifications with calendar links and feedback right on time."
+              "Secured a 6-month pre-placement internship at Razorpay Bengaluru through our college TPO portal with a ₹50,000/month stipend! The transparent status tracker and interview notifications made the process stress-free."
             </p>
             <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-950 font-bold text-xs flex items-center justify-center">
-                AR
+                AS
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900 dark:text-white">Aiden Reynolds</p>
-                <p className="text-[10px] text-slate-400">Computer Science '26 • Placed at Apex Cloud</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white">Aarav Sharma</p>
+                <p className="text-[10px] text-slate-400">B.Tech Computer Engg '26 • Placed at Razorpay (₹50k/mo)</p>
               </div>
             </div>
           </Card>
@@ -395,15 +395,15 @@ export const LandingPage: React.FC = () => {
               {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />)}
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
-              "As an internship coordinator, reviewing resumes and scheduling technical interview rounds used to take weeks of email back-and-forth. CIMS centralizes everything in one dashboard."
+              "As a departmental placement coordinator, screening 500+ student applications and scheduling rounds with companies like TCS, Infosys, and Flipkart is now completely automated and seamless."
             </p>
             <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950 font-bold text-xs flex items-center justify-center">
-                MS
+                SS
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900 dark:text-white">Prof. Marcus Sterling</p>
-                <p className="text-[10px] text-slate-400">Internship Coordinator • Faculty of Engineering</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white">Prof. Sunita Sharma</p>
+                <p className="text-[10px] text-slate-400">T&P Coordinator • Computer Engineering Department</p>
               </div>
             </div>
           </Card>
@@ -413,15 +413,15 @@ export const LandingPage: React.FC = () => {
               {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />)}
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
-              "The quality of candidates and standardization of resumes has made hiring high-caliber machine learning interns remarkably efficient for our research team."
+              "The technical caliber of engineering candidates and the seamless online evaluation rubrics made our campus recruitment drive at COEP Pune extraordinarily high-yield."
             </p>
             <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 font-bold text-xs flex items-center justify-center">
-                QN
+                VS
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900 dark:text-white">Dr. Aris Thorne</p>
-                <p className="text-[10px] text-slate-400">Head of AI Research • Quantum Nexus Labs</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white">Vikramaditya Sengupta</p>
+                <p className="text-[10px] text-slate-400">Staff Engineer & Campus Panelist • Razorpay</p>
               </div>
             </div>
           </Card>

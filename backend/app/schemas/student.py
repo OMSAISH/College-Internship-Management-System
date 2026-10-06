@@ -28,7 +28,7 @@ class StudentProfileBase(BaseModel):
     student_id_number: str
     department: str
     batch_year: int
-    gpa: float = Field(..., ge=0.0, le=4.0)
+    gpa: float = Field(..., ge=0.0, le=10.0)
     bio: Optional[str] = None
     linkedin_url: Optional[str] = None
     github_url: Optional[str] = None
@@ -44,7 +44,7 @@ class StudentProfileCreate(StudentProfileBase):
 class StudentProfileUpdate(BaseModel):
     department: Optional[str] = None
     batch_year: Optional[int] = None
-    gpa: Optional[float] = Field(None, ge=0.0, le=4.0)
+    gpa: Optional[float] = Field(None, ge=0.0, le=10.0)
     bio: Optional[str] = None
     linkedin_url: Optional[str] = None
     github_url: Optional[str] = None

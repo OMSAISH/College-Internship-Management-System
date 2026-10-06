@@ -124,7 +124,7 @@ export const StudentApplicationsPage: React.FC = () => {
 
                   <div className="flex items-center gap-3 self-end sm:self-center">
                     <span className="text-xs font-semibold text-slate-500">
-                      ${app.internship?.stipend_amount.toLocaleString()}/mo
+                      ₹{app.internship?.stipend_amount.toLocaleString()}/mo
                     </span>
                     <button className="p-1 rounded-lg text-slate-400 hover:text-slate-600">
                       {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}

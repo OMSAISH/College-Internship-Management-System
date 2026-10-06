@@ -99,7 +99,7 @@ export const StudentSavedPage: React.FC = () => {
                   </span>
                   <span>•</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200">
-                    ${internship.stipend_amount.toLocaleString()}/mo
+                    ₹{internship.stipend_amount.toLocaleString()}/mo
                   </span>
                   <span>•</span>
                   <Badge variant={internship.work_mode === 'REMOTE' ? 'success' : 'info'} size="sm">

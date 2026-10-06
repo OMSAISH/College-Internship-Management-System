@@ -207,7 +207,7 @@ export const StudentApplicationWizard: React.FC = () => {
               {internship.title}
             </h2>
             <p className="text-xs text-brand-600 dark:text-brand-400">
-              {internship.company?.name} • ${internship.stipend_amount.toLocaleString()}/mo • {internship.location}
+              {internship.company?.name} • ₹{internship.stipend_amount.toLocaleString()}/mo • {internship.location}
             </p>
           </div>
         </div>

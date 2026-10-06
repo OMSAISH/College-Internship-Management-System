@@ -85,17 +85,19 @@ All internship evaluations follow a standardized 7-criteria competency framework
 
 ---
 
-## 🔑 Demo Accounts & Pre-Seeded Credentials
+## 🇮🇳 Real-World Indian Dataset & Pre-Seeded Accounts
 
-The system comes pre-seeded with **3 core role accounts**, **20 realistic students**, **10 corporate partners**, **20 internship postings**, and applications across all pipeline stages.
+The system is built in India for Indian engineering universities, colleges, and Training & Placement Offices (TPO), compliant with **AICTE Internship Policy v3** and **UGC Outcome-Based Education (OBE)** guidelines. All financial data is rendered in Indian National Rupees (**₹ INR**).
 
-> 💡 **Instant Demo Switcher:** On the navbar and sidebar, click the **Demo Accounts** button to log in instantly as any role with a single click!
+It comes pre-seeded with **10 top Indian tech enterprises & GCCs** (TCS, Infosys, Razorpay, Zomato, Flipkart, PhonePe, Reliance Jio, Wipro, HCLTech, Swiggy) with verified **Corporate Identification Numbers (CIN)**, **20 real-world Indian engineering student profiles** across top branches (CSE, IT, AI & Data Science, E&TC, Mechanical), and **20 verified internship opportunities** with stipends ranging from ₹25,000 to ₹60,000 / month across Bengaluru, Pune, Hyderabad, Mumbai, Gurugram, and Noida.
 
-| Role | Email | Password | Access Scope |
-| :--- | :--- | :--- | :--- |
-| **Institutional Admin** | `admin@demo.local` | `Admin@1234` | Full system governance, approvals, settings, audit logs |
-| **Faculty Coordinator** | `faculty@demo.local` | `Faculty@1234` | Post roles, screen candidates, schedule interviews, rubrics |
-| **Student** | `student@demo.local` | `Student@1234` | Discover jobs, apply with wizard, view interviews & status |
+> 💡 **1-Click Demo Switcher:** On the navbar, click the **Demo Accounts** dropdown to switch between personas instantly without manual typing!
+
+| Role | Name & Designation | Email | Password | Access Scope |
+| :--- | :--- | :--- | :--- | :--- |
+| **Institutional Admin / TPO** | Dr. Rajesh Kulkarni *(Dean - Training & Placement)* | `admin@demo.local` | `Admin@1234` | Full campus governance, company drive approvals, NIRF placement metrics, audit logs |
+| **Faculty Coordinator** | Prof. Sunita Sharma *(T&P Coordinator, Computer Engg)* | `faculty@demo.local` | `Faculty@1234` | Post company drives, screen applicants, schedule interview slots, AICTE 7-criteria rubrics |
+| **Engineering Student** | Aarav Sharma *(B.Tech Computer Engg '26, CGPA: 9.24)* | `student@demo.local` | `Student@1234` | Discover internships, apply with multi-step wizard, track offers (Placed at Razorpay ₹50k/mo) |
 
 ---
 

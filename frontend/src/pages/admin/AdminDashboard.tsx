@@ -203,7 +203,7 @@ export const AdminDashboard: React.FC = () => {
             <div>
               <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">Average Monthly Stipend</div>
               <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                ${data.overview.average_stipend.toLocaleString()}
+                ₹{data.overview.average_stipend.toLocaleString()}
               </div>
             </div>
             <div className="p-3 bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-xl">

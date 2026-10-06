@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex items-center gap-2 text-xs text-slate-400">
               <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              <span>FERPA & Institutional Privacy Compliant</span>
+              <span>AICTE & UGC Placement Guidelines Compliant</span>
             </div>
           </div>
 
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <span className="text-slate-400">Academic Evaluation Rubrics</span>
+                <span className="text-slate-400">AICTE 7-Criteria Rubrics</span>
               </li>
               <li>
                 <span className="text-slate-400">Placement Cell MoUs</span>
@@ -82,29 +82,29 @@ export const Footer: React.FC = () => {
           {/* Column 4: Support & Standards */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
-              Institution
+              Training & Placement Office
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <span className="text-slate-400">Placement Regulations 2026</span>
+                <span className="text-slate-400">AICTE Internship Policy v3</span>
               </li>
               <li>
-                <span className="text-slate-400">Academic Curricular Credit (CPT)</span>
+                <span className="text-slate-400">Semester Internship Credits</span>
               </li>
               <li>
-                <span className="text-slate-400">support@university-cims.edu</span>
+                <span className="text-slate-400">tpo@campus.ac.in</span>
               </li>
               <li>
-                <span className="text-slate-400">+1 (800) 555-CIMS</span>
+                <span className="text-slate-400">+91 (020) 2550-7000 / +91 98220 12345</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© 2026 College Internship Management System. All rights reserved.</p>
+          <p>© 2026 College Internship Management System (CIMS India). All rights reserved.</p>
           <div className="flex items-center gap-1 text-[11px]">
-            <span>Designed for University Placement Cells & Engineering Faculties</span>
+            <span>Built in India for University Training & Placement Cells (TPO) • AICTE & NIRF Aligned</span>
           </div>
         </div>
       </div>

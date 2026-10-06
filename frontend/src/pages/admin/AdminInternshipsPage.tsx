@@ -251,7 +251,7 @@ export const AdminInternshipsPage: React.FC = () => {
                     </td>
 
                     <td className="px-4 py-3 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                      ${item.stipend_amount.toLocaleString()}/mo
+                      ₹{item.stipend_amount.toLocaleString()}/mo
                     </td>
 
                     <td className="px-4 py-3 text-xs text-gray-500">
@@ -310,7 +310,7 @@ export const AdminInternshipsPage: React.FC = () => {
                   {reviewingItem.company?.name}
                 </span>
                 <span className="text-xs font-semibold text-emerald-600">
-                  ${reviewingItem.stipend_amount.toLocaleString()} / month
+                  ₹{reviewingItem.stipend_amount.toLocaleString()} / month
                 </span>
               </div>
               <div className="text-xs text-gray-500 flex flex-wrap gap-3">

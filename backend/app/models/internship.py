@@ -34,7 +34,7 @@ class Internship(Base):
     work_mode = Column(SAEnum(WorkMode), nullable=False, default=WorkMode.HYBRID)
     
     stipend_amount = Column(Float, nullable=False, default=0.0)
-    stipend_currency = Column(String(10), nullable=False, default="USD")
+    stipend_currency = Column(String(10), nullable=False, default="INR")
     duration_weeks = Column(Integer, nullable=False)  # 4 to 26 weeks
     openings = Column(Integer, nullable=False, default=1)
     

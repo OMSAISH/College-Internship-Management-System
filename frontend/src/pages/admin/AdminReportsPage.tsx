@@ -175,7 +175,7 @@ export const AdminReportsPage: React.FC = () => {
             <div>
               <div className="text-xs text-gray-500 font-medium">Average Monthly Stipend</div>
               <div className="text-2xl font-bold text-gray-900 dark:text-white mt-1">
-                ${data.overview.average_stipend.toLocaleString()}
+                ₹{data.overview.average_stipend.toLocaleString()}
               </div>
             </div>
             <div className="p-3 bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 rounded-xl">
