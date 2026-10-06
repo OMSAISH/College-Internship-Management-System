@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "https://college-internship-management-system-api.onrender.com/api/v1/:path*"
+    },
+    {
+      "source": "/docs",
+      "destination": "https://college-internship-management-system-api.onrender.com/docs"
+    },
+    {
+      "source": "/redoc",
+      "destination": "https://college-internship-management-system-api.onrender.com/redoc"
+    },
+    {
+      "source": "/openapi.json",
+      "destination": "https://college-internship-management-system-api.onrender.com/api/v1/openapi.json"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: college-internship-management-system-api
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENVIRONMENT
+        value: production
+      - key: FRONTEND_URL
+        value: https://college-internship-management-syste-liart.vercel.app
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: TOTP_ENCRYPTION_KEY
+        value: 1JEagI9K_VZ85R4NLCawX9oN_wWzYDHcyF8KO33e9Hs=
