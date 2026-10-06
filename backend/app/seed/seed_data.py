@@ -4,7 +4,7 @@ from datetime import datetime, date, timedelta
 from sqlalchemy.orm import Session
 
 from backend.app.core.database import SessionLocal, engine, Base
-from backend.app.core.security import get_password_hash
+from backend.app.core.security import get_password_hash, encrypt_totp_secret, hash_secret_token
 from backend.app.models import (
     User, UserRole, StudentProfile, PlacementStatus,
     FacultyProfile, Company, CompanyContact, CompanyRating,
@@ -14,7 +14,8 @@ from backend.app.models import (
     Evaluation, HiringRecommendation,
     Feedback, FeedbackTargetType, FeedbackStatus,
     Notification, NotificationCategory,
-    AuditLog, SystemSetting, Bookmark
+    AuditLog, SystemSetting, Bookmark,
+    TwoFactorRecoveryCode
 )
 
 def run_seed():
@@ -24,13 +25,13 @@ def run_seed():
 
     try:
         # Check if already seeded with Sanjivani University data
-        existing_admin = db.query(User).filter(User.email == "admin@demo.local").first()
+        existing_admin = db.query(User).filter(User.email == "tpo@sanjivani.edu.in").first()
         existing_setting = db.query(SystemSetting).filter(SystemSetting.key == "AFFILIATING_UNIVERSITY").first()
         if existing_admin and existing_setting and "Sanjivani" in str(existing_setting.value):
             print("✨ Sanjivani University seed data already exists in database. Skipping generation.")
             return
         elif existing_admin:
-            print("🔄 Refreshing existing demo data with Sanjivani University collegiate dataset...")
+            print("🔄 Refreshing existing data with Sanjivani University collegiate dataset...")
             # Clear previous tables to reseed cleanly
             Base.metadata.drop_all(bind=engine)
             Base.metadata.create_all(bind=engine)
@@ -53,40 +54,67 @@ def run_seed():
         for key, val, descr in defaults:
             db.add(SystemSetting(key=key, value=val, description=descr))
 
-        # 2. Demo Core Accounts (Indian College Context)
+        # 2. Institutional Core Accounts (Production Authentication & 2FA Enabled)
+        # Admin: Dr. Rajesh Kulkarni (Director - Training & Placement, Sanjivani University)
         admin_user = User(
-            email="admin@demo.local",
+            email="tpo@sanjivani.edu.in",
             password_hash=get_password_hash("Admin@1234"),
             first_name="Dr. Rajesh",
             last_name="Kulkarni",
-            phone="+91 98220 12345",
+            phone="+91 (02423) 222862",
             role=UserRole.ADMIN,
             is_active=True,
-            is_verified=True
+            is_verified=True,
+            email_verified=True,
+            email_verified_at=datetime.utcnow(),
+            two_factor_enabled=True,
+            two_factor_secret_encrypted=encrypt_totp_secret("JBSWY3DPEHPK3PXP")
         )
         db.add(admin_user)
+        db.commit()
+        db.refresh(admin_user)
 
+        # Pre-seed 10 One-Time Backup Recovery Codes for Admin
+        admin_recovery_codes = [
+            "SU26-REC-0101", "SU26-REC-0202", "SU26-REC-0303", "SU26-REC-0404", "SU26-REC-0505",
+            "SU26-REC-0606", "SU26-REC-0707", "SU26-REC-0808", "SU26-REC-0909", "SU26-REC-1010"
+        ]
+        for r_code in admin_recovery_codes:
+            db.add(TwoFactorRecoveryCode(
+                user_id=admin_user.id,
+                code_hash=hash_secret_token(r_code),
+                used=False
+            ))
+
+        # Faculty Coordinator: Prof. Sunita Sharma
         faculty_user = User(
-            email="faculty@demo.local",
+            email="sunita.sharma@sanjivani.edu.in",
             password_hash=get_password_hash("Faculty@1234"),
             first_name="Prof. Sunita",
             last_name="Sharma",
             phone="+91 98220 54321",
             role=UserRole.FACULTY,
             is_active=True,
-            is_verified=True
+            is_verified=True,
+            email_verified=True,
+            email_verified_at=datetime.utcnow(),
+            two_factor_enabled=False
         )
         db.add(faculty_user)
 
+        # Primary Student Candidate: Aarav Sharma (B.Tech CSE '26)
         primary_student = User(
-            email="student@demo.local",
+            email="aarav.sharma@student.sanjivani.edu.in",
             password_hash=get_password_hash("Student@1234"),
             first_name="Aarav",
             last_name="Sharma",
             phone="+91 98765 43210",
             role=UserRole.STUDENT,
             is_active=True,
-            is_verified=True
+            is_verified=True,
+            email_verified=True,
+            email_verified_at=datetime.utcnow(),
+            two_factor_enabled=False
         )
         db.add(primary_student)
         db.commit()
@@ -165,7 +193,10 @@ def run_seed():
                 phone=f"+91 98220 {idx:02d}941",
                 role=UserRole.STUDENT,
                 is_active=True,
-                is_verified=True
+                is_verified=True,
+                email_verified=True,
+                email_verified_at=datetime.utcnow(),
+                two_factor_enabled=False
             )
             db.add(s_user)
             db.commit()

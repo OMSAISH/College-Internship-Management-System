@@ -2,18 +2,16 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   GraduationCap, LogOut, User as UserIcon,
-  ChevronDown, Sparkles, Building2, Briefcase
+  ChevronDown, Building2, Briefcase, ShieldCheck
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { DarkModeToggle } from '../common/DarkModeToggle';
 import { NotificationDropdown } from '../common/NotificationDropdown';
-import { Badge } from '../common/Badge';
 
 export const Navbar: React.FC = () => {
-  const { user, isAuthenticated, logout, quickLoginAs } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [demoMenuOpen, setDemoMenuOpen] = useState(false);
 
   const getDashboardPath = () => {
     if (!user) return '/login';
@@ -42,14 +40,14 @@ export const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Center Navigation Links (Public / Discovery) */}
+          {/* Navigation Links */}
           <nav className="hidden md:flex items-center gap-1">
             <Link
               to="/internships"
               className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1.5"
             >
               <Briefcase className="w-4 h-4 text-slate-400" />
-              Explore Internships
+              Internships
             </Link>
             <Link
               to="/companies"
@@ -61,75 +59,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Action Cluster */}
-          <div className="flex items-center gap-2">
-            
-            {/* Quick Demo Switcher Button */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setDemoMenuOpen(!demoMenuOpen)}
-                className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition-colors"
-                title="Quick Demo Role Switcher"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>Demo Accounts</span>
-                <ChevronDown className="w-3 h-3 opacity-60" />
-              </button>
-
-              {demoMenuOpen && (
-                <div
-                  className="absolute right-0 mt-2 w-56 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-premium z-50 p-2 animate-in fade-in zoom-in-95"
-                  onMouseLeave={() => setDemoMenuOpen(false)}
-                >
-                  <p className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                    Switch Test Persona
-                  </p>
-                  <button
-                    onClick={async () => {
-                      await quickLoginAs('admin');
-                      setDemoMenuOpen(false);
-                      navigate('/admin/dashboard');
-                    }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between"
-                  >
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">Admin Portal</p>
-                      <p className="text-[10px] text-slate-400">admin@demo.local</p>
-                    </div>
-                    <Badge variant="danger" size="sm">Admin</Badge>
-                  </button>
-                  <button
-                    onClick={async () => {
-                      await quickLoginAs('faculty');
-                      setDemoMenuOpen(false);
-                      navigate('/faculty/dashboard');
-                    }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between"
-                  >
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">Faculty Coordinator</p>
-                      <p className="text-[10px] text-slate-400">faculty@demo.local</p>
-                    </div>
-                    <Badge variant="brand" size="sm">Faculty</Badge>
-                  </button>
-                  <button
-                    onClick={async () => {
-                      await quickLoginAs('student');
-                      setDemoMenuOpen(false);
-                      navigate('/student/dashboard');
-                    }}
-                    className="w-full text-left px-3 py-2 rounded-xl text-xs hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between"
-                  >
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">Student Candidate</p>
-                      <p className="text-[10px] text-slate-400">student@demo.local</p>
-                    </div>
-                    <Badge variant="success" size="sm">Student</Badge>
-                  </button>
-                </div>
-              )}
-            </div>
-
+          <div className="flex items-center gap-3">
             <DarkModeToggle />
 
             {isAuthenticated ? (
@@ -177,6 +107,15 @@ export const Navbar: React.FC = () => {
                       >
                         <UserIcon className="w-4 h-4 text-slate-400" />
                         My Dashboard
+                      </Link>
+
+                      <Link
+                        to="/settings/security"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                      >
+                        <ShieldCheck className="w-4 h-4 text-brand-500" />
+                        Security & 2FA
                       </Link>
 
                       <button

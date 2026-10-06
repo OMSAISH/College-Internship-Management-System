@@ -2,17 +2,23 @@ import pytest
 from fastapi.testclient import TestClient
 from backend.app.main import app
 
+import pyotp
+
 client = TestClient(app)
 
 @pytest.fixture
 def admin_token():
-    res = client.post("/api/v1/auth/login", json={"email": "admin@demo.local", "password": "Admin@1234"})
-    assert res.status_code == 200
-    return res.json()["access_token"]
+    step1 = client.post("/api/v1/auth/login", json={"email": "tpo@sanjivani.edu.in", "password": "Admin@1234"})
+    assert step1.status_code == 200
+    temp_token = step1.json()["temp_token"]
+    totp_code = pyotp.TOTP("JBSWY3DPEHPK3PXP").now()
+    step2 = client.post("/api/v1/auth/2fa/login", json={"temp_token": temp_token, "totp_code": totp_code})
+    assert step2.status_code == 200
+    return step2.json()["access_token"]
 
 @pytest.fixture
 def faculty_token():
-    res = client.post("/api/v1/auth/login", json={"email": "faculty@demo.local", "password": "Faculty@1234"})
+    res = client.post("/api/v1/auth/login", json={"email": "sunita.sharma@sanjivani.edu.in", "password": "Faculty@1234"})
     assert res.status_code == 200
     return res.json()["access_token"]
 

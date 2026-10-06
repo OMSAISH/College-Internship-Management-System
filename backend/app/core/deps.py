@@ -1,11 +1,14 @@
+from datetime import datetime
 from typing import Generator, Optional, List
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+
 from backend.app.core.config import settings
 from backend.app.core.database import get_db
 from backend.app.core.security import decode_access_token
 from backend.app.models.user import User, UserRole
+from backend.app.models.auth_security import UserSession
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/auth/login",
@@ -30,12 +33,37 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     user_id = payload.get("sub")
+    session_id = payload.get("sid")
     if not user_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials user token.",
+            detail="Could not validate user credentials token.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+    # Validate active session revocation if session ID is present
+    if session_id:
+        session_record = db.query(UserSession).filter(
+            UserSession.session_id == session_id,
+            UserSession.user_id == int(user_id)
+        ).first()
+        if session_record:
+            if session_record.revoked_at is not None:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="This session has been revoked or signed out. Please log in again.",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            if session_record.expires_at < datetime.utcnow():
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Session expired. Please log in again.",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            # Update last activity
+            session_record.last_used_at = datetime.utcnow()
+            db.commit()
+
     user = db.query(User).filter(User.id == int(user_id), User.deleted_at.is_(None)).first()
     if not user:
         raise HTTPException(
@@ -60,8 +88,18 @@ def get_optional_current_user(
         if not payload:
             return None
         user_id = payload.get("sub")
+        session_id = payload.get("sid")
         if not user_id:
             return None
+        
+        if session_id:
+            session_record = db.query(UserSession).filter(
+                UserSession.session_id == session_id,
+                UserSession.user_id == int(user_id)
+            ).first()
+            if session_record and (session_record.revoked_at is not None or session_record.expires_at < datetime.utcnow()):
+                return None
+
         return db.query(User).filter(User.id == int(user_id), User.deleted_at.is_(None)).first()
     except Exception:
         return None

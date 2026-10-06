@@ -12,6 +12,14 @@ from backend.app.models.notification import Notification, NotificationCategory
 from backend.app.models.audit_log import AuditLog
 from backend.app.models.system_setting import SystemSetting
 from backend.app.models.bookmark import Bookmark
+from backend.app.models.auth_security import (
+    EmailVerificationToken,
+    PasswordResetToken,
+    TwoFactorRecoveryCode,
+    UserSession,
+    SecurityEvent,
+    FacultyInvitation,
+)
 
 __all__ = [
     "Base",
@@ -43,4 +51,10 @@ __all__ = [
     "AuditLog",
     "SystemSetting",
     "Bookmark",
+    "EmailVerificationToken",
+    "PasswordResetToken",
+    "TwoFactorRecoveryCode",
+    "UserSession",
+    "SecurityEvent",
+    "FacultyInvitation",
 ]

@@ -2,12 +2,14 @@ import pytest
 from fastapi.testclient import TestClient
 from backend.app.main import app
 
+import pyotp
+
 client = TestClient(app)
 
 def test_student_applications_and_rbacs():
     # Login as student
     login_res = client.post("/api/v1/auth/login", json={
-        "email": "student@demo.local",
+        "email": "aarav.sharma@student.sanjivani.edu.in",
         "password": "Student@1234"
     })
     token = login_res.json()["access_token"]
@@ -26,7 +28,7 @@ def test_student_applications_and_rbacs():
 def test_faculty_review_and_status_update():
     # Login as faculty
     fac_login = client.post("/api/v1/auth/login", json={
-        "email": "faculty@demo.local",
+        "email": "sunita.sharma@sanjivani.edu.in",
         "password": "Faculty@1234"
     })
     fac_token = fac_login.json()["access_token"]
@@ -52,12 +54,20 @@ def test_faculty_review_and_status_update():
     assert update_res.json()["status"] == "SHORTLISTED"
 
 def test_admin_analytics_dashboard():
-    # Login as admin
-    admin_login = client.post("/api/v1/auth/login", json={
-        "email": "admin@demo.local",
+    # Login as admin with mandatory 2FA
+    step1 = client.post("/api/v1/auth/login", json={
+        "email": "tpo@sanjivani.edu.in",
         "password": "Admin@1234"
     })
-    admin_token = admin_login.json()["access_token"]
+    assert step1.status_code == 200
+    temp_token = step1.json()["temp_token"]
+    totp_code = pyotp.TOTP("JBSWY3DPEHPK3PXP").now()
+    step2 = client.post("/api/v1/auth/2fa/login", json={
+        "temp_token": temp_token,
+        "totp_code": totp_code
+    })
+    assert step2.status_code == 200
+    admin_token = step2.json()["access_token"]
     admin_headers = {"Authorization": f"Bearer {admin_token}"}
 
     dash = client.get("/api/v1/reports/dashboard", headers=admin_headers)

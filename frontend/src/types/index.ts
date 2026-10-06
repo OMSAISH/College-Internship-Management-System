@@ -10,9 +10,36 @@ export interface User {
   role: UserRole;
   is_active: boolean;
   is_verified: boolean;
+  email_verified?: boolean;
+  two_factor_enabled?: boolean;
   avatar_url?: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface UserSession {
+  id: number;
+  session_id: string;
+  device_information?: string | null;
+  ip_address?: string | null;
+  created_at: string;
+  last_used_at: string;
+  is_current?: boolean;
+}
+
+export interface SecurityEvent {
+  id: number;
+  event_type: string;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  details?: string | null;
+  created_at: string;
+}
+
+export interface TwoFactorSetupData {
+  secret: string;
+  otpauth_uri: string;
+  qr_code_data_uri: string;
 }
 
 export type PlacementStatus = 'not_placed' | 'placed' | 'opted_out' | 'seeking' | 'not_interested' | 'NOT_PLACED' | 'PLACED' | 'OPTED_OUT' | 'SEEKING' | 'NOT_INTERESTED';

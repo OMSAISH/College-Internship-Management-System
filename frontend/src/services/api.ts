@@ -72,15 +72,33 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 export const api = {
   // Auth
   login: (credentials: { email: string; password: string }) =>
-    request<{ access_token: string; token_type: string; user: User }>('/auth/login', {
+    request<{ access_token?: string; refresh_token?: string; token_type?: string; user?: User; requires_2fa?: boolean; requires_2fa_setup?: boolean; temp_token?: string; message?: string }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
+    }),
+
+  login2fa: (data: { temp_token: string; totp_code?: string; recovery_code?: string }) =>
+    request<{ access_token: string; refresh_token?: string; token_type: string; user: User }>('/auth/2fa/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
     }),
 
   register: (userData: any) =>
     request<User>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData),
+    }),
+
+  verifyEmail: (token: string) =>
+    request<{ message: string; email: string; is_verified: boolean }>('/auth/verify-email', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    }),
+
+  resendVerification: (email: string) =>
+    request<{ message: string }>('/auth/resend-verification', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
     }),
 
   getMe: () => request<User>('/auth/me'),
@@ -92,8 +110,68 @@ export const api = {
     }),
 
   forgotPassword: (email: string) =>
-    request<{ message: string }>(`/auth/forgot-password?email=${encodeURIComponent(email)}`, {
+    request<{ message: string }>('/auth/forgot-password', {
       method: 'POST',
+      body: JSON.stringify({ email }),
+    }),
+
+  resetPassword: (payload: { token: string; new_password: string }) =>
+    request<{ message: string }>('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  // 2FA Management
+  setup2fa: () =>
+    request<{ secret: string; otpauth_uri: string; qr_code_data_uri: string }>('/auth/2fa/setup', {
+      method: 'POST',
+    }),
+
+  verifyAndEnable2fa: (code: string) =>
+    request<{ message: string; recovery_codes: string[] }>('/auth/2fa/verify-and-enable', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    }),
+
+  regenerateRecoveryCodes: () =>
+    request<{ message: string; recovery_codes: string[] }>('/auth/2fa/regenerate-recovery-codes', {
+      method: 'POST',
+    }),
+
+  disable2fa: (current_password: string) =>
+    request<{ message: string }>('/auth/2fa/disable', {
+      method: 'POST',
+      body: JSON.stringify({ current_password, new_password: '' }),
+    }),
+
+  // Session & Security Activity
+  getSessions: () =>
+    request<any[]>('/auth/sessions'),
+
+  revokeSession: (sessionId: string) =>
+    request<{ message: string }>(`/auth/sessions/${sessionId}`, {
+      method: 'DELETE',
+    }),
+
+  revokeAllSessions: () =>
+    request<{ message: string }>('/auth/sessions/revoke-all', {
+      method: 'POST',
+    }),
+
+  getSecurityEvents: (limit: number = 20) =>
+    request<any[]>(`/auth/security-events?limit=${limit}`),
+
+  // Faculty Invitation
+  inviteFaculty: (data: { email: string; department: string; designation: string }) =>
+    request<{ message: string; invitation_url: string; token: string }>('/auth/faculty/invite', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  acceptFacultyInvite: (data: any) =>
+    request<{ message: string; email: string }>('/auth/faculty/accept', {
+      method: 'POST',
+      body: JSON.stringify(data),
     }),
 
   // Students

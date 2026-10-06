@@ -12,9 +12,16 @@ import { DashboardLayout } from './components/layout/DashboardLayout';
 import { LandingPage } from './pages/public/LandingPage';
 import { LoginPage } from './pages/public/LoginPage';
 import { RegisterPage } from './pages/public/RegisterPage';
+import { VerifyEmailPage } from './pages/public/VerifyEmailPage';
+import { ForgotPasswordPage } from './pages/public/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/public/ResetPasswordPage';
+import { AcceptFacultyInvitePage } from './pages/public/AcceptFacultyInvitePage';
 import { InternshipDiscoveryPage } from './pages/public/InternshipDiscoveryPage';
 import { InternshipDetailPage } from './pages/public/InternshipDetailPage';
 import { CompaniesPage } from './pages/public/CompaniesPage';
+
+// Settings & Security
+import { SecuritySettingsPage } from './pages/settings/SecuritySettingsPage';
 
 // Student Pages
 import { StudentDashboard } from './pages/student/StudentDashboard';
@@ -83,6 +90,11 @@ export function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/verify-email" element={<VerifyEmailPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path="/accept-faculty-invite" element={<AcceptFacultyInvitePage />} />
+                <Route path="/settings/security" element={<SecuritySettingsPage />} />
                 <Route path="/internships" element={<InternshipDiscoveryPage />} />
                 <Route path="/internships/:id" element={<InternshipDetailPage />} />
                 <Route path="/companies" element={<CompaniesPage />} />
