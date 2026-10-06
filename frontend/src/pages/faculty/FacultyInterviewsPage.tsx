@@ -116,16 +116,20 @@ export const FacultyInterviewsPage: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                {iv.location_or_link && (
-                  <a
-                    href={iv.location_or_link.includes('http') ? iv.location_or_link : '#'}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-2 text-xs font-semibold text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-950 rounded-lg flex items-center gap-1"
-                  >
-                    Meeting Link <ExternalLink className="w-3 h-3" />
-                  </a>
-                )}
+                {iv.location_or_link && (() => {
+                  const match = iv.location_or_link.match(/(https?:\/\/[^\s]+)/);
+                  const targetUrl = match ? match[0] : (iv.location_or_link.startsWith('http') ? iv.location_or_link : '#');
+                  return (
+                    <a
+                      href={targetUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-2 text-xs font-semibold text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-950 rounded-lg flex items-center gap-1"
+                    >
+                      Meeting Link <ExternalLink className="w-3 h-3" />
+                    </a>
+                  );
+                })()}
 
                 {iv.status !== 'COMPLETED' && (
                   <Button

@@ -265,18 +265,22 @@ export const StudentDashboard: React.FC = () => {
                       </div>
                     </div>
 
-                    {iv.location_or_link && (
-                      <div className="pt-1">
-                        <a
-                          href={iv.location_or_link.includes('http') ? iv.location_or_link : '#'}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="w-full inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white transition-colors"
-                        >
-                          Join Interview <ExternalLink className="w-3 h-3" />
-                        </a>
-                      </div>
-                    )}
+                    {iv.location_or_link && (() => {
+                      const match = iv.location_or_link.match(/(https?:\/\/[^\s]+)/);
+                      const targetUrl = match ? match[0] : (iv.location_or_link.startsWith('http') ? iv.location_or_link : '#');
+                      return (
+                        <div className="pt-1">
+                          <a
+                            href={targetUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="w-full inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white transition-colors"
+                          >
+                            Join Interview <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+                      );
+                    })()}
                   </div>
                 ))}
               </div>
