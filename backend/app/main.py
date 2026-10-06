@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.openapi.docs import get_redoc_html
 
 # Ensure project root is in sys.path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -19,15 +20,25 @@ from backend.app.seed.seed_data import run_seed
 # Ensure upload directory exists
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 
-# Create FastAPI instance
+# Create FastAPI instance (set redoc_url=None to override with stable UMD CDN)
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     description="Enterprise University Internship & Placement Management System REST API",
     docs_url="/docs",
-    redoc_url="/redoc",
+    redoc_url=None,
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
+
+# Custom ReDoc with stable UMD bundle (fixing blank screen caused by redoc@next ESM import.meta)
+@app.get("/redoc", include_in_schema=False)
+async def custom_redoc_html():
+    return get_redoc_html(
+        openapi_url=app.openapi_url,
+        title=f"{app.title} - ReDoc",
+        redoc_js_url="https://cdn.jsdelivr.net/npm/redoc@2.1.5/bundles/redoc.standalone.js",
+        with_google_fonts=True,
+    )
 
 # CORS Middleware with Vercel and local origins support
 app.add_middleware(
