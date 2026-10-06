@@ -18,12 +18,59 @@ from backend.app.models import (
     TwoFactorRecoveryCode
 )
 
+def _seed_omsaish_admin(db: Session):
+    admin_recovery_codes = [
+        "SU26-REC-0101", "SU26-REC-0202", "SU26-REC-0303", "SU26-REC-0404", "SU26-REC-0505",
+        "SU26-REC-0606", "SU26-REC-0707", "SU26-REC-0808", "SU26-REC-0909", "SU26-REC-1010"
+    ]
+    existing = db.query(User).filter(User.email == "omsaish.dhokchaule24@sanjivani.edu.in").first()
+    if not existing:
+        omsaish_admin = User(
+            email="omsaish.dhokchaule24@sanjivani.edu.in",
+            password_hash=get_password_hash("Admin@1234"),
+            first_name="Mr. Omsaish",
+            last_name="Dhokchaule",
+            phone="+91 98220 12345",
+            role=UserRole.ADMIN,
+            is_active=True,
+            is_verified=True,
+            email_verified=True,
+            email_verified_at=datetime.utcnow(),
+            two_factor_enabled=True,
+            two_factor_secret_encrypted=encrypt_totp_secret("JBSWY3DPEHPK3PXP")
+        )
+        db.add(omsaish_admin)
+        db.commit()
+        db.refresh(omsaish_admin)
+        for r_code in admin_recovery_codes:
+            db.add(TwoFactorRecoveryCode(
+                user_id=omsaish_admin.id,
+                code_hash=hash_secret_token(r_code),
+                used=False
+            ))
+        db.commit()
+        print("👤 Seeded Admin: Mr. Omsaish Dhokchaule (omsaish.dhokchaule24@sanjivani.edu.in)")
+    else:
+        existing.first_name = "Mr. Omsaish"
+        existing.last_name = "Dhokchaule"
+        existing.role = UserRole.ADMIN
+        existing.password_hash = get_password_hash("Admin@1234")
+        existing.is_active = True
+        existing.is_verified = True
+        existing.email_verified = True
+        existing.two_factor_enabled = True
+        existing.two_factor_secret_encrypted = encrypt_totp_secret("JBSWY3DPEHPK3PXP")
+        db.commit()
+
 def run_seed():
     print("🌱 Initializing Database Schema...")
     Base.metadata.create_all(bind=engine)
     db: Session = SessionLocal()
 
     try:
+        # Ensure Mr. Omsaish Dhokchaule exists as Administrator
+        _seed_omsaish_admin(db)
+
         # Check if already seeded with Sanjivani University data
         existing_admin = db.query(User).filter(User.email == "tpo@sanjivani.edu.in").first()
         existing_setting = db.query(SystemSetting).filter(SystemSetting.key == "AFFILIATING_UNIVERSITY").first()
@@ -37,6 +84,7 @@ def run_seed():
             Base.metadata.create_all(bind=engine)
             db.close()
             db = SessionLocal()
+            _seed_omsaish_admin(db)
 
         print("🇮🇳 Seeding authentic Sanjivani University & Tech Industry Placement data...")
 

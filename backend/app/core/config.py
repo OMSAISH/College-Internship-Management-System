@@ -38,8 +38,8 @@ class Settings(BaseSettings):
     SMTP_USER: str = os.getenv("SMTP_USER", "")
     SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
     SMTP_TLS: bool = os.getenv("SMTP_TLS", "true").lower() == "true"
-    EMAIL_FROM: str = os.getenv("EMAIL_FROM", "tpo@sanjivani.edu.in")
-    EMAIL_FROM_NAME: str = os.getenv("EMAIL_FROM_NAME", "Sanjivani University TPO")
+    EMAIL_FROM: str = os.getenv("EMAIL_FROM", "omsaish.dhokchaule24@sanjivani.edu.in")
+    EMAIL_FROM_NAME: str = os.getenv("EMAIL_FROM_NAME", "Mr. Omsaish Dhokchaule - Sanjivani University TPO")
     RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
     
     # Security Policies & Brute Force Lockout
