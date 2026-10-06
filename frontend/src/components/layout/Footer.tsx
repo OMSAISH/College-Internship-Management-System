@@ -92,19 +92,22 @@ export const Footer: React.FC = () => {
                 <span className="text-slate-400">Semester Internship Credits</span>
               </li>
               <li>
-                <span className="text-slate-400">tpo@campus.ac.in</span>
+                <span className="text-slate-400">tpo@sanjivani.edu.in</span>
               </li>
               <li>
-                <span className="text-slate-400">+91 (020) 2550-7000 / +91 98220 12345</span>
+                <span className="text-slate-400">+91 (02423) 222862 / +91 98220 12345</span>
+              </li>
+              <li>
+                <span className="text-slate-400">Kopargaon, Maharashtra 423603</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© 2026 College Internship Management System (CIMS India). All rights reserved.</p>
+          <p>© 2026 Sanjivani University. All rights reserved.</p>
           <div className="flex items-center gap-1 text-[11px]">
-            <span>Built in India for University Training & Placement Cells (TPO) • AICTE & NIRF Aligned</span>
+            <span>Official Training & Placement Cell (TPO) • Sanjivani University • AICTE & UGC Approved</span>
           </div>
         </div>
       </div>

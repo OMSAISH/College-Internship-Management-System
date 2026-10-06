@@ -74,7 +74,7 @@ export const LandingPage: React.FC = () => {
             
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950/80 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
               <Sparkles className="w-3.5 h-3.5 text-brand-600" />
-              <span>Official University Training & Placement Gateway 2026 • AICTE Compliant</span>
+              <span>Official Sanjivani University Training & Placement Gateway 2026 • AICTE & UGC Approved</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
@@ -85,7 +85,7 @@ export const LandingPage: React.FC = () => {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-              Connecting engineering students, Training & Placement Officers (TPO), and India's top tech enterprises & GCCs across the complete internship lifecycle from discovery to Pre-Placement Offers (PPO).
+              Connecting Sanjivani University engineering students, Training & Placement Officers (TPO), and India's top tech enterprises & GCCs across the complete internship lifecycle from discovery to Pre-Placement Offers (PPO).
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
@@ -385,7 +385,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-xs font-bold text-slate-900 dark:text-white">Aarav Sharma</p>
-                <p className="text-[10px] text-slate-400">B.Tech Computer Engg '26 • Placed at Razorpay (₹50k/mo)</p>
+                <p className="text-[10px] text-slate-400">B.Tech Computer Engg '26, Sanjivani University • Placed at Razorpay (₹50k/mo)</p>
               </div>
             </div>
           </Card>
@@ -403,7 +403,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-xs font-bold text-slate-900 dark:text-white">Prof. Sunita Sharma</p>
-                <p className="text-[10px] text-slate-400">T&P Coordinator • Computer Engineering Department</p>
+                <p className="text-[10px] text-slate-400">T&P Coordinator • School of Computing, Sanjivani University</p>
               </div>
             </div>
           </Card>
@@ -413,7 +413,7 @@ export const LandingPage: React.FC = () => {
               {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />)}
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
-              "The technical caliber of engineering candidates and the seamless online evaluation rubrics made our campus recruitment drive at COEP Pune extraordinarily high-yield."
+              "The technical caliber of engineering candidates and the seamless online evaluation rubrics made our campus recruitment drive at Sanjivani University extraordinarily high-yield."
             </p>
             <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 font-bold text-xs flex items-center justify-center">

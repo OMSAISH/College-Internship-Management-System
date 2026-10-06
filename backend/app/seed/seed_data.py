@@ -23,30 +23,31 @@ def run_seed():
     db: Session = SessionLocal()
 
     try:
-        # Check if already seeded with Indian data
+        # Check if already seeded with Sanjivani University data
         existing_admin = db.query(User).filter(User.email == "admin@demo.local").first()
-        if existing_admin and existing_admin.first_name == "Dr. Rajesh":
-            print("✨ Indian real-world seed data already exists in database. Skipping generation.")
+        existing_setting = db.query(SystemSetting).filter(SystemSetting.key == "AFFILIATING_UNIVERSITY").first()
+        if existing_admin and existing_setting and "Sanjivani" in str(existing_setting.value):
+            print("✨ Sanjivani University seed data already exists in database. Skipping generation.")
             return
         elif existing_admin:
-            print("🔄 Refreshing existing demo data with authentic Indian collegiate dataset...")
+            print("🔄 Refreshing existing demo data with Sanjivani University collegiate dataset...")
             # Clear previous tables to reseed cleanly
             Base.metadata.drop_all(bind=engine)
             Base.metadata.create_all(bind=engine)
             db.close()
             db = SessionLocal()
 
-        print("🇮🇳 Seeding authentic Indian University & Tech Industry Placement data...")
+        print("🇮🇳 Seeding authentic Sanjivani University & Tech Industry Placement data...")
 
-        # 1. System Settings - Aligned with Indian Technical Universities & AICTE Guidelines
+        # 1. System Settings - Aligned with Sanjivani University & AICTE Guidelines
         defaults = [
             ("ACADEMIC_SESSION", "2025-2026", "Current active academic session across colleges"),
             ("MIN_CGPA_THRESHOLD", "6.5", "Minimum CGPA (scale of 10.0) required for placement eligibility"),
             ("MAX_ACTIVE_APPLICATIONS_PER_STUDENT", "10", "Maximum concurrent active internship applications allowed per student"),
             ("INTERVIEW_NOTICE_MIN_HOURS", "24", "Mandatory minimum advance notice in hours before scheduling campus interviews"),
             ("ALLOW_STUDENT_COMPANY_RATINGS", "true", "Permit registered students to rate corporate recruitment culture"),
-            ("AFFILIATING_UNIVERSITY", "COEP Technological University, Pune (Autonomous)", "Apex Institutional Entity"),
-            ("PLACEMENT_CELL_CONTACT", "tpo@coep.ac.in | +91 (020) 2550-7000", "Official Training & Placement Office contact"),
+            ("AFFILIATING_UNIVERSITY", "Sanjivani University, Kopargaon (Autonomous / Private University, Maharashtra)", "Apex Institutional Entity"),
+            ("PLACEMENT_CELL_CONTACT", "tpo@sanjivani.edu.in | +91 (02423) 222862", "Official Training & Placement Office contact"),
             ("CURRENCY_SYMBOL", "₹", "Official institutional currency symbol (INR)")
         ]
         for key, val, descr in defaults:
@@ -93,20 +94,20 @@ def run_seed():
         # Faculty profile for Prof. Sunita Sharma
         db.add(FacultyProfile(
             user_id=faculty_user.id,
-            employee_id="FAC-CSE-108",
+            employee_id="SU-FAC-CSE-108",
             department="Computer Engineering",
             designation="Associate Professor & Training & Placement Coordinator",
-            cabin_location="Aryabhatta Academic Complex, Room 304, T&P Wing"
+            cabin_location="Sanjivani Tech Complex, Room 304, T&P Division"
         ))
 
-        # Student profile for Aarav Sharma (COEP Pune - B.Tech CSE)
+        # Student profile for Aarav Sharma (Sanjivani University - B.Tech CSE)
         db.add(StudentProfile(
             user_id=primary_student.id,
-            student_id_number="PRN202201040001",
+            student_id_number="SU2022CS0001",
             department="Computer Engineering",
             batch_year=2026,
             gpa=9.24,  # Scale of 10.0
-            bio="Final-year B.Tech Computer Engineering student at COEP Technological University. Passionate about distributed systems, microservices, cloud-native architectures, and Go/FastAPI backend engineering. Smart India Hackathon (SIH) finalist and active open-source contributor.",
+            bio="Final-year B.Tech Computer Engineering student at Sanjivani University, Kopargaon. Passionate about distributed systems, microservices, cloud-native architectures, and Go/FastAPI backend engineering. Smart India Hackathon (SIH) finalist and active open-source contributor.",
             resume_url="/api/v1/files/download/aarav_sharma_cse_resume.pdf",
             resume_filename="Aarav_Sharma_BTech_CSE_Resume.pdf",
             resume_updated_at=datetime.utcnow() - timedelta(days=3),
@@ -115,8 +116,8 @@ def run_seed():
             portfolio_url="https://aaravsharma.dev",
             skills=["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker", "Go", "Redis", "Tailwind CSS", "Kubernetes"],
             education=[
-                {"degree": "B.Tech in Computer Engineering", "institution": "COEP Technological University, Pune", "start_year": 2022, "end_year": 2026, "gpa": 9.24},
-                {"degree": "Higher Secondary Certificate (HSC) - Science", "institution": "Fergusson College, Pune", "start_year": 2020, "end_year": 2022, "gpa": 9.40}
+                {"degree": "B.Tech in Computer Engineering", "institution": "Sanjivani University, Kopargaon", "start_year": 2022, "end_year": 2026, "gpa": 9.24},
+                {"degree": "Higher Secondary Certificate (HSC) - Science", "institution": "Sanjivani Junior College, Kopargaon", "start_year": 2020, "end_year": 2022, "gpa": 9.40}
             ],
             projects=[
                 {"title": "BharatPay UPI Gateway Simulator", "description": "High-throughput asynchronous mock payment settlement pipeline built with Go, Redis pub/sub, and PostgreSQL.", "tech_stack": ["Go", "Redis", "PostgreSQL", "Docker"], "github_url": "https://github.com/aarav-sharma/bharatpay-core"},
@@ -132,26 +133,26 @@ def run_seed():
 
         # 3. 20 Authentic Indian Students Across Departments & Top Colleges
         realistic_students_data = [
-            ("Priya", "Patel", "priya.patel@student.campus.ac.in", "Computer Engineering", 9.45, ["Python", "PyTorch", "NLP", "FastAPI", "React"]),
-            ("Rohan", "Deshmukh", "rohan.deshmukh@student.campus.ac.in", "Information Technology", 8.85, ["Java", "Spring Boot", "MySQL", "Kubernetes", "Kafka"]),
-            ("Sneha", "Kulkarni", "sneha.kulkarni@student.campus.ac.in", "Artificial Intelligence & Data Science", 9.12, ["Python", "TensorFlow", "Pandas", "Computer Vision", "SQL"]),
-            ("Aditya", "Nair", "aditya.nair@student.campus.ac.in", "Electronics & Telecommunication", 8.55, ["C++", "Embedded C", "IoT", "RTOS", "Python"]),
-            ("Ananya", "Iyer", "ananya.iyer@student.campus.ac.in", "Computer Engineering", 9.30, ["TypeScript", "Next.js", "Node.js", "GraphQL", "Tailwind CSS"]),
-            ("Siddharth", "Verma", "siddharth.verma@student.campus.ac.in", "Software Engineering", 8.75, ["Go", "Microservices", "Docker", "PostgreSQL", "gRPC"]),
-            ("Kavya", "Swaminathan", "kavya.swaminathan@student.campus.ac.in", "Data Science & Analytics", 9.20, ["Python", "R", "SQL", "Tableau", "Scikit-Learn"]),
-            ("Vikram", "Joshi", "vikram.joshi@student.campus.ac.in", "Computer Engineering", 8.40, ["C++", "Data Structures", "Algorithms", "Competitive Programming"]),
-            ("Neha", "Gupta", "neha.gupta@student.campus.ac.in", "Information Technology", 9.38, ["React", "Redux", "Node.js", "MongoDB", "AWS"]),
-            ("Arjun", "Reddy", "arjun.reddy@student.campus.ac.in", "Computer Engineering", 9.05, ["Python", "Deep Learning", "Transformers", "CUDA", "Linux"]),
-            ("Pooja", "Sundaram", "pooja.sundaram@student.campus.ac.in", "Artificial Intelligence & Robotics", 8.65, ["ROS2", "Python", "OpenCV", "C++", "SLAM"]),
-            ("Rahul", "Mehta", "rahul.mehta@student.campus.ac.in", "Computer Engineering", 8.80, ["Flutter", "Dart", "Firebase", "Android", "REST APIs"]),
-            ("Tanvi", "Shinde", "tanvi.shinde@student.campus.ac.in", "Cybersecurity & InfoSec", 9.15, ["Network Security", "Penetration Testing", "Wireshark", "Linux", "Python"]),
-            ("Yash", "Patil", "yash.patil@student.campus.ac.in", "Mechanical Engineering (IoT Minor)", 8.20, ["AutoCAD", "MATLAB", "SolidWorks", "Python", "PLC"]),
-            ("Ishita", "Sen", "ishita.sen@student.campus.ac.in", "Computer Engineering", 9.40, ["Rust", "Systems Programming", "Distributed Systems", "Linux Kernel"]),
-            ("Nikhil", "Agrawal", "nikhil.agrawal@student.campus.ac.in", "Computer Engineering", 8.60, ["C#", ".NET Core", "Azure", "SQL Server", "Docker"]),
-            ("Riya", "Bansal", "riya.bansal@student.campus.ac.in", "Information Technology", 9.22, ["Figma", "UI/UX", "React", "Design Systems", "HTML/CSS"]),
-            ("Varun", "Menon", "varun.menon@student.campus.ac.in", "Electronics & Communication", 8.48, ["VLSI", "Verilog", "Embedded Systems", "FPGA", "C"]),
-            ("Divya", "Nambiar", "divya.nambiar@student.campus.ac.in", "Data Science & Analytics", 8.92, ["Big Data", "Spark", "PySpark", "Snowflake", "PowerBI"]),
-            ("Harsh", "Vardhan", "harsh.vardhan@student.campus.ac.in", "Software Engineering", 8.70, ["JavaScript", "Express", "MongoDB", "Docker", "Node.js"])
+            ("Priya", "Patel", "priya.patel@student.sanjivani.edu.in", "Computer Engineering", 9.45, ["Python", "PyTorch", "NLP", "FastAPI", "React"]),
+            ("Rohan", "Deshmukh", "rohan.deshmukh@student.sanjivani.edu.in", "Information Technology", 8.85, ["Java", "Spring Boot", "MySQL", "Kubernetes", "Kafka"]),
+            ("Sneha", "Kulkarni", "sneha.kulkarni@student.sanjivani.edu.in", "Artificial Intelligence & Data Science", 9.12, ["Python", "TensorFlow", "Pandas", "Computer Vision", "SQL"]),
+            ("Aditya", "Nair", "aditya.nair@student.sanjivani.edu.in", "Electronics & Telecommunication", 8.55, ["C++", "Embedded C", "IoT", "RTOS", "Python"]),
+            ("Ananya", "Iyer", "ananya.iyer@student.sanjivani.edu.in", "Computer Engineering", 9.30, ["TypeScript", "Next.js", "Node.js", "GraphQL", "Tailwind CSS"]),
+            ("Siddharth", "Verma", "siddharth.verma@student.sanjivani.edu.in", "Software Engineering", 8.75, ["Go", "Microservices", "Docker", "PostgreSQL", "gRPC"]),
+            ("Kavya", "Swaminathan", "kavya.swaminathan@student.sanjivani.edu.in", "Data Science & Analytics", 9.20, ["Python", "R", "SQL", "Tableau", "Scikit-Learn"]),
+            ("Vikram", "Joshi", "vikram.joshi@student.sanjivani.edu.in", "Computer Engineering", 8.40, ["C++", "Data Structures", "Algorithms", "Competitive Programming"]),
+            ("Neha", "Gupta", "neha.gupta@student.sanjivani.edu.in", "Information Technology", 9.38, ["React", "Redux", "Node.js", "MongoDB", "AWS"]),
+            ("Arjun", "Reddy", "arjun.reddy@student.sanjivani.edu.in", "Computer Engineering", 9.05, ["Python", "Deep Learning", "Transformers", "CUDA", "Linux"]),
+            ("Pooja", "Sundaram", "pooja.sundaram@student.sanjivani.edu.in", "Artificial Intelligence & Robotics", 8.65, ["ROS2", "Python", "OpenCV", "C++", "SLAM"]),
+            ("Rahul", "Mehta", "rahul.mehta@student.sanjivani.edu.in", "Computer Engineering", 8.80, ["Flutter", "Dart", "Firebase", "Android", "REST APIs"]),
+            ("Tanvi", "Shinde", "tanvi.shinde@student.sanjivani.edu.in", "Cybersecurity & InfoSec", 9.15, ["Network Security", "Penetration Testing", "Wireshark", "Linux", "Python"]),
+            ("Yash", "Patil", "yash.patil@student.sanjivani.edu.in", "Mechanical Engineering (IoT Minor)", 8.20, ["AutoCAD", "MATLAB", "SolidWorks", "Python", "PLC"]),
+            ("Ishita", "Sen", "ishita.sen@student.sanjivani.edu.in", "Computer Engineering", 9.40, ["Rust", "Systems Programming", "Distributed Systems", "Linux Kernel"]),
+            ("Nikhil", "Agrawal", "nikhil.agrawal@student.sanjivani.edu.in", "Computer Engineering", 8.60, ["C#", ".NET Core", "Azure", "SQL Server", "Docker"]),
+            ("Riya", "Bansal", "riya.bansal@student.sanjivani.edu.in", "Information Technology", 9.22, ["Figma", "UI/UX", "React", "Design Systems", "HTML/CSS"]),
+            ("Varun", "Menon", "varun.menon@student.sanjivani.edu.in", "Electronics & Communication", 8.48, ["VLSI", "Verilog", "Embedded Systems", "FPGA", "C"]),
+            ("Divya", "Nambiar", "divya.nambiar@student.sanjivani.edu.in", "Data Science & Analytics", 8.92, ["Big Data", "Spark", "PySpark", "Snowflake", "PowerBI"]),
+            ("Harsh", "Vardhan", "harsh.vardhan@student.sanjivani.edu.in", "Software Engineering", 8.70, ["JavaScript", "Express", "MongoDB", "Docker", "Node.js"])
         ]
 
         all_student_users = [primary_student]
@@ -172,11 +173,11 @@ def run_seed():
 
             db.add(StudentProfile(
                 user_id=s_user.id,
-                student_id_number=f"PRN20220104{1000 + idx:04d}",
+                student_id_number=f"SU2022CS{1000 + idx:04d}",
                 department=dept,
                 batch_year=2026,
                 gpa=gpa,
-                bio=f"Pre-final year {dept} student at COEP Tech University. Dedicated to engineering robust, industry-ready solutions.",
+                bio=f"Pre-final year {dept} student at Sanjivani University, Kopargaon. Dedicated to engineering robust, industry-ready solutions.",
                 resume_url=f"/api/v1/files/download/{first.lower()}_{last.lower()}_resume.pdf",
                 resume_filename=f"{first}_{last}_BTech_Resume.pdf",
                 resume_updated_at=datetime.utcnow() - timedelta(days=random.randint(1, 15)),
@@ -589,7 +590,7 @@ def run_seed():
             qualifications={
                 "cgpa": "9.24 / 10.0",
                 "degree": "B.Tech in Computer Engineering",
-                "university": "COEP Technological University, Pune",
+                "university": "Sanjivani University, Kopargaon",
                 "relevant_coursework": "Distributed Systems, Database Engineering, Algorithms, Operating Systems"
             },
             status=ApplicationStatus.ACCEPTED,
@@ -717,7 +718,7 @@ def run_seed():
                 internship_id=target_internship.id,
                 student_id=student.id,
                 resume_url=f"/api/v1/files/download/{student.first_name.lower()}_{student.last_name.lower()}_resume.pdf",
-                cover_letter=f"Respected Placement Committee, I wish to apply for the {target_internship.title} position at {target_internship.company.name}. My academic coursework at COEP Tech University and hands-on projects directly align with your requirements.",
+                cover_letter=f"Respected Placement Committee, I wish to apply for the {target_internship.title} position at {target_internship.company.name}. My academic coursework at Sanjivani University and hands-on projects directly align with your requirements.",
                 qualifications={"cgpa": f"{student.student_profile.gpa} / 10.0", "department": student.student_profile.department},
                 status=selected_status,
                 faculty_notes="Candidate reviewed and recommended by Department T&P Advisor.",
@@ -816,7 +817,7 @@ def run_seed():
             title="Exceptional Campus Drive Process at Razorpay",
             comment="The technical problem statements reflected genuine production challenges. Mentors and panelists were very supportive and provided actionable feedback.",
             status=FeedbackStatus.RESOLVED,
-            admin_response="Thank you for your feedback Aarav. The Training & Placement Office appreciates Razorpay's continued partnership with our university."
+            admin_response="Thank you for your feedback Aarav. The Training & Placement Office appreciates Razorpay's continued partnership with Sanjivani University."
         ))
         db.add(Feedback(
             from_user_id=primary_student.id,

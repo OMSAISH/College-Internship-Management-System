@@ -34,10 +34,10 @@ export const Navbar: React.FC = () => {
             </div>
             <div>
               <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-                CIMS <span className="text-xs px-1.5 py-0.5 rounded-md font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/50">Campus</span>
+                Sanjivani <span className="text-xs px-1.5 py-0.5 rounded-md font-semibold bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/50">CIMS</span>
               </span>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium hidden sm:block">
-                University Internship & Career Portal
+                Sanjivani University • Training & Placement Cell
               </p>
             </div>
           </Link>

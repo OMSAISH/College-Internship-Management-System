@@ -138,10 +138,10 @@ export const StudentProfilePage: React.FC = () => {
                   {user?.full_name}
                 </h1>
                 <p className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
-                  {profile.department} Major • State University of Technology
+                  {profile.department} • Sanjivani University, Kopargaon
                 </p>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  ID: {profile.student_id_number} • Class of {profile.batch_year}
+                  PRN: {profile.student_id_number} • Class of {profile.batch_year}
                 </p>
               </div>
             </div>
@@ -159,8 +159,8 @@ export const StudentProfilePage: React.FC = () => {
           {/* Quick Metrics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Cumulative GPA</span>
-              <span className="text-sm font-bold text-slate-900 dark:text-white">{profile.gpa} / 4.0</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Cumulative CGPA</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white">{profile.gpa} / 10.0</span>
             </div>
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Verified Email</span>
@@ -343,11 +343,11 @@ export const StudentProfilePage: React.FC = () => {
               onChange={e => setEditDept(e.target.value)}
             />
             <Input
-              label="Cumulative GPA"
+              label="Cumulative CGPA (Scale 0.0 - 10.0)"
               type="number"
               step="0.01"
               min="0.0"
-              max="4.0"
+              max="10.0"
               value={editGpa}
               onChange={e => setEditGpa(parseFloat(e.target.value) || 0)}
             />
