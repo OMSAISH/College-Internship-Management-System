@@ -212,7 +212,7 @@ def test_session_management_and_revocation():
 def test_faculty_invitation_workflow():
     """Admin invites faculty coordinator -> Faculty coordinator accepts and activates account."""
     # 1. Login as Admin with 2FA
-    step1 = client.post("/api/v1/auth/login", json={"email": "tpo@sanjivani.edu.in", "password": "Admin@1234"})
+    step1 = client.post("/api/v1/auth/login", json={"email": "tpo@sanjivani.edu.in", "password": "Sanjivani@Admin2026"})
     totp = pyotp.TOTP("JBSWY3DPEHPK3PXP").now()
     step2 = client.post("/api/v1/auth/2fa/login", json={"temp_token": step1.json()["temp_token"], "totp_code": totp})
     admin_headers = {"Authorization": f"Bearer {step2.json()['access_token']}"}

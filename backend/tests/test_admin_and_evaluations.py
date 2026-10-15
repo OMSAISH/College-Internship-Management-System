@@ -8,7 +8,7 @@ client = TestClient(app)
 
 @pytest.fixture
 def admin_token():
-    step1 = client.post("/api/v1/auth/login", json={"email": "tpo@sanjivani.edu.in", "password": "Admin@1234"})
+    step1 = client.post("/api/v1/auth/login", json={"email": "tpo@sanjivani.edu.in", "password": "Sanjivani@Admin2026"})
     assert step1.status_code == 200
     temp_token = step1.json()["temp_token"]
     totp_code = pyotp.TOTP("JBSWY3DPEHPK3PXP").now()

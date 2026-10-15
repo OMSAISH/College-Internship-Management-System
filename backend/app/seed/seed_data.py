@@ -27,7 +27,7 @@ def _seed_omsaish_admin(db: Session):
     if not existing:
         omsaish_admin = User(
             email="omsaish.dhokchaule24@sanjivani.edu.in",
-            password_hash=get_password_hash("Admin@1234"),
+            password_hash=get_password_hash("Sanjivani@Admin2026"),
             first_name="Mr. Omsaish",
             last_name="Dhokchaule",
             phone="+91 98220 12345",
@@ -54,12 +54,23 @@ def _seed_omsaish_admin(db: Session):
         existing.first_name = "Mr. Omsaish"
         existing.last_name = "Dhokchaule"
         existing.role = UserRole.ADMIN
-        existing.password_hash = get_password_hash("Admin@1234")
+        existing.password_hash = get_password_hash("Sanjivani@Admin2026")
+        existing.failed_login_attempts = 0
+        existing.locked_until = None
         existing.is_active = True
         existing.is_verified = True
         existing.email_verified = True
         existing.two_factor_enabled = True
         existing.two_factor_secret_encrypted = encrypt_totp_secret("JBSWY3DPEHPK3PXP")
+        
+        # Refresh all 10 backup recovery codes
+        db.query(TwoFactorRecoveryCode).filter(TwoFactorRecoveryCode.user_id == existing.id).delete()
+        for r_code in admin_recovery_codes:
+            db.add(TwoFactorRecoveryCode(
+                user_id=existing.id,
+                code_hash=hash_secret_token(r_code),
+                used=False
+            ))
         db.commit()
 
 def run_seed():
@@ -106,7 +117,7 @@ def run_seed():
         # Admin: Dr. Rajesh Kulkarni (Director - Training & Placement, Sanjivani University)
         admin_user = User(
             email="tpo@sanjivani.edu.in",
-            password_hash=get_password_hash("Admin@1234"),
+            password_hash=get_password_hash("Sanjivani@Admin2026"),
             first_name="Dr. Rajesh",
             last_name="Kulkarni",
             phone="+91 (02423) 222862",

@@ -14,7 +14,7 @@ def test_login_admin_with_2fa():
     # Step 1: Password validation returns 2FA challenge
     step1 = client.post("/api/v1/auth/login", json={
         "email": "tpo@sanjivani.edu.in",
-        "password": "Admin@1234"
+        "password": "Sanjivani@Admin2026"
     })
     assert step1.status_code == 200
     data1 = step1.json()
