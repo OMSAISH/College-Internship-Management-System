@@ -20,8 +20,8 @@ from backend.app.models import (
 
 def _seed_omsaish_admin(db: Session):
     admin_recovery_codes = [
-        "SU26-REC-0101", "SU26-REC-0202", "SU26-REC-0303", "SU26-REC-0404", "SU26-REC-0505",
-        "SU26-REC-0606", "SU26-REC-0707", "SU26-REC-0808", "SU26-REC-0909", "SU26-REC-1010"
+        "A160-E200", "2A64-9E2F", "B012-D175", "5474-4A82", "FBCF-E0A2",
+        "20D9-EA16", "9B9F-3719", "1B24-A2B5", "A3EF-7C86", "B1B4-EFCF"
     ]
     existing = db.query(User).filter(User.email == "omsaish.dhokchaule24@sanjivani.edu.in").first()
     if not existing:
@@ -135,8 +135,8 @@ def run_seed():
 
         # Pre-seed 10 One-Time Backup Recovery Codes for Admin
         admin_recovery_codes = [
-            "SU26-REC-0101", "SU26-REC-0202", "SU26-REC-0303", "SU26-REC-0404", "SU26-REC-0505",
-            "SU26-REC-0606", "SU26-REC-0707", "SU26-REC-0808", "SU26-REC-0909", "SU26-REC-1010"
+            "A160-E200", "2A64-9E2F", "B012-D175", "5474-4A82", "FBCF-E0A2",
+            "20D9-EA16", "9B9F-3719", "1B24-A2B5", "A3EF-7C86", "B1B4-EFCF"
         ]
         for r_code in admin_recovery_codes:
             db.add(TwoFactorRecoveryCode(
